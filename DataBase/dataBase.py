@@ -16,9 +16,10 @@ class DataBase:
 
     def create_user(self, user_data: dict):
         try:
-            self.db.users.insert_one(user_data)
+            user_added = self.db.users.insert_one(user_data)
         except:
             return "Error: Could not create user", 400
+        return user_added, 200
 
     def get_all_users(self):
         try:
