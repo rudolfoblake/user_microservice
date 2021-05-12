@@ -1,3 +1,5 @@
+import json
+
 import pymongo
 from bson.objectid import ObjectId
 import pandas as pd
@@ -30,20 +32,22 @@ class DataBase:
             response = pd.DataFrame(self.db.users.find())
         except:
             return "Error: Could not get_all_users() in database", 400
-        return response, 200
+        return str(response), 200
 
     def get_user_by_email(self, email):
         try:
-            response = pd.DataFrame(self.db.users.find({"email": email}))
+            response = self.db.users.find_one({"email": email})
         except:
             return "Error: Could not get_user_by_email() in database", 400
+        response["_id"] = str(response["_id"])
         return response, 200
 
     def get_user_by_id(self, id):
         try:
-            response = pd.DataFrame(self.db.users.find({"_id": id}))
+            response = self.db.users.find_one({"_id": id})
         except:
             return "Error: Could not get_user_by_id() in database", 400
+        response["_id"] = str(response["_id"])
         return response, 200
 
     def id_creation(self, id):
