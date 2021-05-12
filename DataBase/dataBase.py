@@ -1,6 +1,7 @@
 import pymongo
 from bson.objectid import ObjectId
 import pandas as pd
+from datetime import datetime
 pd.set_option("display.max_columns", None)
 
 class DataBase:
@@ -14,9 +15,12 @@ class DataBase:
         except:
             raise Exception("Falha ao conectar ao banco de dados!")
 
-    def create_user(self, user_data: dict):
+    def create_user(self, user_values: dict):
+        todays_date = datetime.today()
+        user_values['created_at'] = todays_date
+        user_values['uploaded_at'] = todays_date
         try:
-            user_added = self.db.users.insert_one(user_data)
+            user_added = self.db.users.insert_one(user_values)
         except:
             return "Error: Could not create user", 400
         return user_added, 200
