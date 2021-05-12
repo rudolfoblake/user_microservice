@@ -17,7 +17,7 @@ def register_route():
     return result[0], result[1]
 
 
-@app.route("/user/{int:id}")
+@app.route("/user/{str:id}")
 def get_user_by_id_route(id):
     result = rc.get_user_by_id_route(id)
     return result[0], result[1]

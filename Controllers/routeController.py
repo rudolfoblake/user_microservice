@@ -2,7 +2,7 @@ import base64
 from Controllers import inputController
 ic = inputController.InputControl()
 from DataBase import dataBase
-db = dataBase()
+db = dataBase.DataBase()
 
 
 class RouteControl:
