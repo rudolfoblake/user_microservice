@@ -22,7 +22,7 @@ class DataBase:
         user_values['created_at'] = todays_date
         user_values['uploaded_at'] = todays_date
         try:
-            user_added = self.db.users.insert_one(user_values)
+            user_added = self.db.users.insert_one(user_values).inserted_id
         except:
             return "Error: Could not create user", 400
         return user_added, 200
@@ -39,7 +39,8 @@ class DataBase:
             response = self.db.users.find_one({"email": email})
         except:
             return "Error: Could not get_user_by_email() in database", 400
-        response["_id"] = str(response["_id"])
+        if response:
+            response["_id"] = str(response["_id"])
         return response, 200
 
     def get_user_by_id(self, id):
@@ -47,7 +48,8 @@ class DataBase:
             response = self.db.users.find_one({"_id": id})
         except:
             return "Error: Could not get_user_by_id() in database", 400
-        response["_id"] = str(response["_id"])
+        if response:
+            response["_id"] = str(response["_id"])
         return response, 200
 
     def id_creation(self, id):
