@@ -6,9 +6,10 @@ db = dataBase.DataBase()
 
 
 class RouteControl:
-    def register_route(self, req:dict) -> tuple:
+    def register_route(self, req: dict) -> tuple:
         verify_user_register_requeriments = ic.verify_user_register_requirements(req)
-        if verify_user_register_requeriments[1] != 200: return verify_user_register_requeriments
+        if verify_user_register_requeriments[1] != 200:
+            return verify_user_register_requeriments
         return req, 200
 
     def get_user_by_id_route(self, id):
