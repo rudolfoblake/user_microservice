@@ -25,7 +25,7 @@ class DataBase:
             user_added = self.db.users.insert_one(user_values).inserted_id
         except:
             return "Error: Could not create user", 400
-        return user_added, 200
+        return str(user_added), 200
 
     def get_all_users(self):
         try:
