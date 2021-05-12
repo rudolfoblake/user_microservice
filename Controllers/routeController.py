@@ -16,6 +16,8 @@ class RouteControl:
                 return "Error: A user with that email already exists.", 400
         else:
             return get_email[0], get_email[1]
+        return "success", 200
+
 
     def get_user_by_id_route(self, id):
         return db.get_user_by_id(db.id_creation(id))
