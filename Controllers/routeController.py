@@ -11,6 +11,7 @@ class RouteControl:
         verify_user_register_requeriments = ic.verify_user_register_requirements(req)
         if verify_user_register_requeriments[1] != 200: 
             return verify_user_register_requeriments
+        req['cpf'] = req['cpf'].replace(".", "").replace("-", "")
         get_email = db.get_user_by_email(req["email"])
         if get_email[1] == 200:
             if get_email[0]:
