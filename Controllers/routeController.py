@@ -8,9 +8,9 @@ ac = authController.AuthControl()
 
 class RouteControl:
     def register_route(self, user_data: dict) -> tuple:
-        verify_user_register_user_dataueriments = ic.verify_user_register_requirements(user_data)
-        if verify_user_register_user_dataueriments[1] != 200: 
-            return verify_user_register_user_dataueriments
+        verify_user_register_user_requirements = ic.verify_user_register_requirements(user_data)
+        if verify_user_register_user_requirements[1] != 200: 
+            return verify_user_register_user_requirements
         user_data['cpf'] = user_data['cpf'].replace(".", "").replace("-", "")
         get_email = db.get_user_by_email(user_data["email"])
         if get_email[1] == 200:
