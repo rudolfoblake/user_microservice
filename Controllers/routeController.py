@@ -25,9 +25,7 @@ class RouteControl:
             req['password'] = encode_password
         req['password'] = str(req['password'])
         insert_user_in_database = db.create_user(req)
-        if insert_user_in_database[1] != 200:
-            return insert_user_in_database
-        return insert_user_in_database[0], 200
+        return insert_user_in_database
 
 
     def get_user_by_id_route(self, id):
