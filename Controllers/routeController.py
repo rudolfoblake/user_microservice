@@ -17,7 +17,7 @@ class RouteControl:
             if get_email[0]:
                 return "Error: A user with that email already exists.", 400
         else:
-            return get_email[0], get_email[1]
+            return get_email
         if not ac.password_is_encoded(user_data['password']):
             encode_password = ac.password_encode(user_data['password'])
             if encode_password == "":
