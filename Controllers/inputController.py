@@ -7,31 +7,31 @@ import string
 class InputControl:
      def json_to_dict(self, request:json) -> tuple:
           try:
-               req = request.get_json()
+               user_data = request.get_json()
           except:
                return 'Error: Cannot convert data into json!', 400
-          return req, 200
+          return user_data, 200
 
-     def verify_user_register_requirements(self, req: dict) -> tuple:
+     def verify_user_register_requirements(self, user_data: dict) -> tuple:
           try:
-               req['first_name']
-               req['last_name']
-               req['email']
-               req['password']
-               req['cpf']
-               req['date_of_birth']
-               #req['address']
+               user_data['first_name']
+               user_data['last_name']
+               user_data['email']
+               user_data['password']
+               user_data['cpf']
+               user_data['date_of_birth']
+               #user_data['address']
           except:
                return "Error: Requirements (first_name, last_name, email, password, cpf, date_of_birth) not found at json", 400
-          if not self.verify_first_name(req['first_name']): 
+          if not self.verify_first_name(user_data['first_name']): 
                return "Error: Invalid first name.", 400
-          if not self.verify_last_name(req['last_name']):
+          if not self.verify_last_name(user_data['last_name']):
                return "Error: Invalid last name.", 400
-          if not self.validate_cpf(req['cpf']):
+          if not self.validate_cpf(user_data['cpf']):
                return "Error: Invalid CPF.", 400
-          if not self.validate_email(req['email']):
+          if not self.validate_email(user_data['email']):
                return "Error: Invalid Email.", 400
-          if not self.validate_date_of_birth(req['date_of_birth']):
+          if not self.validate_date_of_birth(user_data['date_of_birth']):
                return "Error: Invalid birth date.", 400
           return "Success", 200
 
@@ -39,7 +39,7 @@ class InputControl:
           if " " in first_name or len(first_name) < 3:
                return False
           for i in first_name:
-            if not i in string.ascii_letters and not i == "é" and not i == "ã" and not i == "â":
+            if not i in string.ascii_letters and not i == "é" and not i == "è" and not i == "ã" and not i == "á" and not i == "à":
                 return False
           return True
 
@@ -47,7 +47,7 @@ class InputControl:
           if len(last_name) < 3:
                return False
           for i in last_name:
-            if not i in string.ascii_letters and not i == " " and not i == "é" and not i == "ã" and not i == "â":
+            if not i in string.ascii_letters and not i == "é" and not i == "è" and not i == "ã" and not i == "á" and not i == "à":
                 return False
           return True
 
