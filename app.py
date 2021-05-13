@@ -21,7 +21,7 @@ def register_route():
 @app.route("/user/<string:id>")
 def get_user_by_id_route(id):
     result = rc.get_user_by_id_route(id)
-    return result[0], result[1]
+    return result
 
 
 if __name__ == '__main__':
