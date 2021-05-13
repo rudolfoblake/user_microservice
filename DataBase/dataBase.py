@@ -57,6 +57,8 @@ class DataBase:
 
     def update_user_by_id(self, id, new_values):
         try:
+            todays_date = datetime.today()
+            new_values['updated_at'] = todays_date
             response = self.db.users.update_one({"_id": id}, {"$set": new_values}).modified_count
             if response > 0:
                 return f"Id: {id} was updated with success!", 200
