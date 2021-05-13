@@ -9,7 +9,7 @@ class AuthControl:
             return ""
 
     def password_is_encoded(self, password: str) -> bool:
-        if "=" in password:
+        if "==" in password:
             return True
         return False
 
@@ -28,11 +28,9 @@ class AuthControl:
         return password
 
     def password_decrypt(self, password: str, key: str) -> str:
-        # try:
-        #     f = Fernet("t0uJb3hh87V02FMrwJtHSKGofdpTYn")
-        #     password = f.decrypt(self.password_decode(password))
-        # except:
-        #     return ""
-        # return password
-        f = Fernet("t0uJb3hh87V02FMrwJtHSKGofdpTYn")
-        password = f.decrypt(self.password_decode(password))
+        try:
+            f = Fernet("t0uJb3hh87V02FMrwJtHSKGofdpTYn")
+            password = f.decrypt(self.password_decode(password))
+        except:
+            return ""
+        return password
