@@ -22,8 +22,7 @@ class RouteControl:
             encode_password = ac.password_encode(user_data['password'])
             if encode_password == "":
                 return "Error: Failed to encode password!", 500
-            user_data['password'] = encode_password
-        user_data['password'] = str(user_data['password'])
+            user_data['password'] = str(encode_password)
         insert_user_in_database = db.create_user(user_data)
         return insert_user_in_database
 
