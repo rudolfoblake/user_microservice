@@ -17,7 +17,7 @@ class DataBase:
     def create_user(self, user_values: dict):
         todays_date = datetime.today()
         user_values['created_at'] = todays_date
-        user_values['uploaded_  at'] = todays_date
+        user_values['uploaded_at'] = todays_date
         try:
             user_added = self.db.users.insert_one(user_values).inserted_id
             return str(user_added), 200
