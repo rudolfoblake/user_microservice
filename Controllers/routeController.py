@@ -8,6 +8,15 @@ ac = authController.AuthControl()
 
 class RouteControl:
     def register_route(self, user_data: dict) -> tuple:
+        """Controller da rota de registro
+        Conferir os dados enviados, verificar se o email já existe no banco de dados e registrar um novo usuário.
+
+        Args:
+            user_data (dict): Dicionário com as informações do usuário.
+
+        Returns:
+            tuple(content, statuscode): Retorna o id do usuário registrado e o statuscode, em caso de erro retorna a mensagem de erro.
+        """
         verify_user_register_user_requirements = ic.verify_user_register_requirements(user_data)
         if verify_user_register_user_requirements[1] != 200: 
             return verify_user_register_user_requirements
