@@ -2,7 +2,7 @@ import pymongo
 from bson.objectid import ObjectId
 from datetime import datetime
 
-
+print(datetime)
 class DataBase:
 
     def __init__(self):
@@ -19,6 +19,7 @@ class DataBase:
         todays_date = datetime.today()
         user_values['created_at'] = todays_date
         user_values['uploaded_at'] = todays_date
+        # print(self.db)
         try:
             user_added = self.db.users.insert_one(user_values).inserted_id
             return str(user_added), 200
@@ -38,6 +39,7 @@ class DataBase:
     def get_user_by_id(self, id):
         try:
             response = self.db.users.find_one({"_id": id})
+            #, {"password": 0}
             if response:
                 response["_id"] = str(response["_id"])
                 return response, 200
