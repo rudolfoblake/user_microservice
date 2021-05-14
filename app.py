@@ -9,6 +9,7 @@ ic = inputController.InputControl()
 
 app = Flask(__name__)
 
+
 @app.route("/user/auth/register", methods=['POST'])
 def register_route():
     transfrom_to_dict = ic.json_to_dict(request)

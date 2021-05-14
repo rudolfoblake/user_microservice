@@ -1,10 +1,7 @@
-import json
-
 import pymongo
 from bson.objectid import ObjectId
-import pandas as pd
 from datetime import datetime
-pd.set_option("display.max_columns", None)
+
 
 class DataBase:
 
@@ -16,7 +13,7 @@ class DataBase:
             self.db = self.conn["database_teste"]
             self.users = self.db["users"]
         except:
-            raise Exception("Falha ao conectar ao banco de dados!")
+            raise Exception("Failed to connect with the TestDataBase, check your string connection!!")
 
     def create_user(self, user_values: dict):
         todays_date = datetime.today()
@@ -24,34 +21,51 @@ class DataBase:
         user_values['uploaded_at'] = todays_date
         try:
             user_added = self.db.users.insert_one(user_values).inserted_id
+            return str(user_added), 200
         except:
             return "Error: Could not create user", 400
-        return str(user_added), 200
-
-    def get_all_users(self):
-        try:
-            response = pd.DataFrame(self.db.users.find())
-        except:
-            return "Error: Could not get_all_users() in database", 400
-        return str(response), 200
 
     def get_user_by_email(self, email):
         try:
             response = self.db.users.find_one({"email": email})
+            if response:
+                response["_id"] = str(response["_id"])
+                return response, 200
+            return f"The following email: {email} does not exist", 400
         except:
             return "Error: Could not get_user_by_email() in database", 400
-        if response:
-            response["_id"] = str(response["_id"])
-        return response, 200
 
     def get_user_by_id(self, id):
         try:
             response = self.db.users.find_one({"_id": id})
+            if response:
+                response["_id"] = str(response["_id"])
+                return response, 200
+            return f"The informed id: {id}, does not exist! Try again!", 400
         except:
             return "Error: Could not get_user_by_id() in database", 400
-        if response:
-            response["_id"] = str(response["_id"])
-        return response, 200
+
+    def update_user_by_id(self, id, new_values):
+        try:
+            new_values['updated_at'] = datetime.today()
+            response = self.db.users.update_one({"_id": id}, {"$set": new_values}).modified_count
+            if response:
+                return f"Id: {id} was updated with success!", 200
+            return f"Error: Id {id} does not exist, try again!", 400
+        except:
+            return "Error: Could not update_user_by_id()", 400
+
+    def delete_user_by_id(self, id):
+        try:
+            response = self.db.users.delete_one({"_id": id}).deleted_count
+            if response:
+                return f"Deleted with success id: {id}", 200
+            return f"Error: Id {id} does not exist, try again!", 400
+        except:
+            return "Error: Could not delete_user_by_id() in database", 400
 
     def id_creation(self, id):
-        return ObjectId(id)
+        try:
+            return ObjectId(id)
+        except:
+            return f"Id is not valid, review your id: {id} and try again!", 400
