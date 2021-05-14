@@ -40,20 +40,19 @@ class RouteControl:
             if not get_user_by_email[0]:
                 return "Error: A user with that email does not exists.", 400
         else:
-            return "Error: Cannot execute search of user email in database.", 500
-        get_user_by_email = get_user_by_email[0]
+            return get_user_by_email
         try:
-            get_user_by_email['password']
+            get_user_by_email[0]['password']
         except:
             return "Error: Cannot get password from user on database to compare.", 500
-        if ac.password_is_encoded(get_user_by_email['password']):
-            decode_database_password = ac.password_decode(get_user_by_email['password'])
+        if ac.password_is_encoded(get_user_by_email[0]['password']):
+            decode_database_password = ac.password_decode(get_user_by_email[0]['password'])
             if decode_database_password == "":
                 return "Error: Failed to decode database password!", 500
-            get_user_by_email['password'] = decode_database_password
-        if get_user_by_email['password'] != user_data['password']:
+            get_user_by_email[0]['password'] = str(decode_database_password)
+        if get_user_by_email[0]['password'] != user_data['password']:
             return "Error: Invalid password!", 401
-        return get_user_by_email['_id']
+        return get_user_by_email[0]['_id'], 200
 
 
     def get_user_by_id_route(self, id):
