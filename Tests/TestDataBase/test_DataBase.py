@@ -1,7 +1,7 @@
 from unittest import mock, TestCase
-from DataBase import dataBase
+from DataBase.dataBase import DataBase
 
-db = dataBase.DataBase()
+# db = dataBase.DataBase
 
 
 class TestDataBase(TestCase):
@@ -9,16 +9,13 @@ class TestDataBase(TestCase):
     def test_init(self):
         pass
 
-    @mock.patch('DataBase.dataBase.datetime')
-    @mock.patch('DataBase.dataBase.DataBase')
-    def test_create_user(self, mock_database_users, mock_datetime):
-        mock_datetime.today.return_value = "AAAA"
-        mock_database_users.db.users.insert_one.return_value = "mock.Mock()"
-        # mock_database_users.users.insert_one.inserted_id = "123"
-        user_dict = dict()
+    @mock.patch("DataBase.dataBase.DataBase.users", create=True)
+    def test_create_user(self, mock_database_users):
+        with mock.patch.object(DataBase, "__init__", lambda x: None):
 
-        self.assertEqual(db.create_user(user_dict), ("123", 200))
-        # delattr(mock_users, "insert_one")
+            mock_database_users.insert_one.return_value.inserted_id = "123"
+
+            self.assertEqual(DataBase().create_user({}), ("123", 200))
 
 
     # def create_user(self, user_values: dict):
