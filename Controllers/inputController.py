@@ -68,21 +68,8 @@ class InputControl:
         return True
 
      def validate_date_of_birth(self, birth: str) -> bool:
-          splited_birth = birth.split("/")
-          if not len(splited_birth) == 3:
+          try:
+               datetime.datetime.strptime(birth, "%m/%d/%Y")
+          except:
                return False
-          for i in range(len(splited_birth)):
-               try:
-                    splited_birth[i] = int(splited_birth[i])
-               except:
-                    return False
-               if i == 0:
-                    if splited_birth[i] <= 0 or splited_birth[i] > 12:
-                         return False
-               elif i == 1:
-                    if splited_birth[i] <= 0 or splited_birth[i] > 31:
-                         return False
-               elif i == 2:
-                    if splited_birth[i] < 1900 or splited_birth[i] > int(datetime.datetime.now().year):
-                         return False
           return True

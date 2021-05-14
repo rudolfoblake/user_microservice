@@ -90,4 +90,4 @@ class TestInputController(TestCase):
         self.assertFalse(ic.validate_date_of_birth("13/00/0000"))
         self.assertFalse(ic.validate_date_of_birth("12/32/0000"))
         self.assertFalse(ic.validate_date_of_birth("12/31/0000"))
-        self.assertTrue(ic.validate_date_of_birth("12/31/2010"))
+        self.assertTrue(ic.validate_date_of_birth("12/20/2010"))
