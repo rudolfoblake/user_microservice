@@ -29,3 +29,34 @@ class TestRouteController(TestCase):
         self.assertEqual(rc.register_route(user_data)[1], 500)
         mock_password_encode.return_value = "test"
         self.assertEqual(rc.register_route(user_data)[1], 200)
+
+    @mock.patch("DataBase.dataBase.DataBase.get_user_by_email")
+    @mock.patch("Controllers.authController.AuthControl.password_decode")
+    @mock.patch("Controllers.authController.AuthControl.password_is_encoded")
+    @mock.patch("Controllers.inputController.InputControl.verify_user_login_requirements")
+    def test_login_route_works(self, mock_verify_user_login_requirements, mock_password_is_encoded, mock_password_decode, mock_get_user_by_email):
+        user_data = dict(
+            email="",
+            password=""
+        )
+        mock_verify_user_login_requirements.return_value = ("", 400)
+        self.assertEqual(rc.login_route(user_data)[1], 400)
+        mock_verify_user_login_requirements.return_value = ("", 200)
+        mock_password_is_encoded.return_value = True
+        mock_password_decode.return_value = ""
+        self.assertEqual(rc.login_route(user_data)[1], 500)
+        mock_password_decode.return_value = "x"
+        mock_get_user_by_email.return_value = ([], 200)
+        self.assertEqual(rc.login_route(user_data)[1], 400)
+        mock_get_user_by_email.return_value = ([], 400)
+        self.assertEqual(rc.login_route(user_data)[1], 400)
+        mock_get_user_by_email.return_value = (dict(_id=""), 200)
+        self.assertEqual(rc.login_route(user_data)[1], 500)
+        mock_get_user_by_email.return_value = (dict(_id="wadwadasdfser", password="awdasdfw"), 200)
+        mock_password_decode.side_effect = ["x", ""]
+        self.assertEqual(rc.login_route(user_data)[1], 500)
+        mock_password_decode.side_effect = ["x", "y"]
+        mock_get_user_by_email.return_value = (dict(_id="wadwadasdfser", password="dawd"), 200)
+        self.assertEqual(rc.login_route(user_data)[1], 401)
+        mock_password_decode.side_effect = ["x", "x"]
+        self.assertEqual(rc.login_route(user_data)[1], 200)
