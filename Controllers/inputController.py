@@ -40,13 +40,13 @@ class InputControl:
                     if type(address_data['address'][i]['address_number']) != int:
                          return "Error: address number need be a int", 400
                     if type(address_data['address'][i]['address_neighbourhood']) != str:
-                         return "Error: address neighbourhood need be a string", 400
+                         return "Error: address neighbourhood needs be a string", 400
                     if type(address_data['address'][i]['address_postal_code']) != str:
-                         return "Error: address postal code need be a int", 400
+                         return "Error: address postal code needs be a int", 400
                     if type(address_data['address'][i]['address_city']) != str:
-                         return "Error: address city need be a string", 400
+                         return "Error: address city needs be a string", 400
                     if type(address_data['address'][i]['address_state']) != str:
-                         return "Error: address state need be a string", 400
+                         return "Error: address state needs be a string", 400
           except:
                return "Error: Requeriments (_id, address[address_number, address_neighbourhood, address_postal_code, address_city, address_state]) not found on json", 400
           return "Success", 200
