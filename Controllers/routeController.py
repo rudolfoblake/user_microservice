@@ -6,6 +6,8 @@ from Controllers import authController
 ac = authController.AuthControl()
 from Controllers import mailController
 mc = mailController.MailControl()
+from Controllers import tokenController
+tc = tokenController.Token()
 
 class RouteControl:
     def register_route(self, user_data: dict) -> tuple:
@@ -77,9 +79,12 @@ class RouteControl:
         get_user_by_email = db.get_user_by_email(email)
         if get_user_by_email[1] != 200:
             return get_user_by_email
-        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha. \n LINK AQUI!"):
+        token = tc.generate_token(get_user_by_email[0]['_id'])
+        if not token:
+            return "Error: Cannot generate token.", 500
+        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha. \n {token['token_id']}"):
             return "Error: Cannot send recover email.", 400
-        return "Success", 200
+        return token['token_id'], 200
     
     def validate_recover_route(self, key):
         pass

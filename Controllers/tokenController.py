@@ -4,7 +4,7 @@ import datetime
 
 tokens = []
 
-class token:
+class Token:
     def save_token(self, token:dict):
         tokens.append(token)
 
