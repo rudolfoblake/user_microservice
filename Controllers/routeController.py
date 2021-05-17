@@ -4,7 +4,8 @@ from DataBase import dataBase
 db = dataBase.DataBase()
 from Controllers import authController
 ac = authController.AuthControl()
-
+from Controllers import mailController
+mc = mailController.MailControl()
 
 class RouteControl:
     def register_route(self, user_data: dict) -> tuple:
@@ -72,16 +73,16 @@ class RouteControl:
             return "Error: Invalid password!", 401
         return get_user_by_email[0]['_id'], 200
 
-    def recover_route(self, user_data):
-        try:
-            email = user_data['email']
-        except:
-            return "Error: Cannot found email into json", 400
-
+    def recover_route(self, email):
         get_user_by_email = db.get_user_by_email(email)
         if get_user_by_email[1] != 200:
             return get_user_by_email
-        
+        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha. \n LINK AQUI!"):
+            return "Error: Cannot send recover email.", 400
+        return "Success", 200
+    
+    def validate_recover_route(self, key):
+        pass
     
     def get_user_by_id_route(self, id):
         return db.get_user_by_id(db.id_creation(id))
