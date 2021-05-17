@@ -12,6 +12,12 @@ app = Flask(__name__)
 
 @app.route("/user/auth/register", methods=['POST'])
 def register_route():
+    """Rota de registro de usuário
+    Verificar o json recebido e chamar o controller da rota.
+
+    Returns:
+        tuple(content, statuscode): Retorna o id do usuário registrado e o statuscode, em caso de erro retorna a mensagem de erro.
+    """
     transfrom_to_dict = ic.json_to_dict(request)
     if transfrom_to_dict[1] != 200:
         return transfrom_to_dict
