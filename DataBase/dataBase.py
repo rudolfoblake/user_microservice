@@ -33,7 +33,7 @@ class DataBase:
 
         try:
             user_added = self.users.insert_one(user_values).inserted_id
-            return str(user_added), 200
+            return str(user_added), 201
         except:
             return "Error: Could not create user", 400
 
