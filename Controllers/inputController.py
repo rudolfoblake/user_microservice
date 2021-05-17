@@ -31,6 +31,27 @@ class InputControl:
                return "Error: Requirements (first_name, last_name, email, password, cpf, date_of_birth) not found at json", 400
           return "Success", 200
 
+     def verify_address_requirements(self, address_data: dict) -> tuple:
+          try:
+               if not all(char in string.ascii_letters or char in string.digits for char in address_data['_id']):
+                         return "Error: ID cannot be none", 400
+               if not type(address_data['address']) == list:
+                    return "Error: address need be a list", 400
+               for i in range(len(address_data['address'])):
+                    if type(address_data['address'][i]['address_number']) != int:
+                         return "Error: address number need be a int", 400
+                    if type(address_data['address'][i]['address_neighbourhood']) != str:
+                         return "Error: address neighbourhood need be a string", 400
+                    if type(address_data['address'][i]['address_postal_code']) != int:
+                         return "Error: address postal code need be a int", 400
+                    if type(address_data['address'][i]['address_city']) != str:
+                         return "Error: address city need be a string", 400
+                    if type(address_data['address'][i]['address_state']) != str:
+                         return "Error: address state need be a string", 400
+          except:
+               return "Error: Requeriments (_id, address[address_number, address_neighbourhood, address_postal_code, address_city, address_state]) not found on json", 400
+          return "Success", 200
+
      def verify_user_login_requirements(self, user_data: dict) -> tuple:
           try:
                user_data['email']
