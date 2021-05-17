@@ -86,8 +86,10 @@ class RouteControl:
             return "Error: Cannot send recover email.", 400
         return token['token_id'], 200
     
-    def validate_recover_route(self, key):
-        pass
+    def validate_recover_route(self, token):
+        if not tc.verify_token(token):
+            return "Error: Invalid token!", 400
+        return "Valid Token", 200
     
     def get_user_by_id_route(self, id):
         return db.get_user_by_id(db.id_creation(id))

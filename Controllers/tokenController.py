@@ -18,8 +18,10 @@ class Token:
         return token
 
     def verify_token(self, token_id:str):
-        for i in range(len(token)):
-            if token_id == token[i][id]:
-                if toke[i][time] <= time.time():
-                    return True
-        return False
+        is_valid = False
+        for i in range(len(tokens)):
+            if token_id['token_id'] == tokens[i]['token_id']:
+                print("Achou!")
+                if tokens[i]['time'] >= time.time():
+                    is_valid = True
+        return is_valid

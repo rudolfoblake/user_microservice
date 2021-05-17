@@ -43,9 +43,9 @@ def login_route():
 def recover_route(email):
     return rc.recover_route(email)
 
-@app.route("/user/auth/recover/<string:key>")
-def validate_recover_route(key):
-    return validate_recover_route(key)
+@app.route("/user/auth/recover/<string:token>", methods=['GET'])
+def validate_recover_route(token):
+    return validate_recover_route(token)
 
 @app.route("/user/<string:id>")
 def get_user_by_id_route(id):
