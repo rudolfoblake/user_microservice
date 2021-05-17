@@ -38,6 +38,12 @@ def login_route():
     return result
 
 
+@app.route("/user/auth/recover", methods=['POST'])
+def recover_route():
+    transfrom_to_dict = ic.json_to_dict(request)
+    if transfrom_to_dict[1] != 200:
+        return transfrom_to_dict
+
 @app.route("/user/<string:id>")
 def get_user_by_id_route(id):
     result = rc.get_user_by_id_route(id)

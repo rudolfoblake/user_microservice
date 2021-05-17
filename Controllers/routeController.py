@@ -71,6 +71,16 @@ class RouteControl:
             return "Error: Invalid password!", 401
         return get_user_by_email[0]['_id'], 200
 
+    def recover_route(self, user_data):
+        try:
+            email = user_data['email']
+        except:
+            return "Error: Cannot found email into json", 400
 
+        get_user_by_email = db.get_user_by_email(email)
+        if get_user_by_email[1] != 200:
+            return get_user_by_email
+        
+    
     def get_user_by_id_route(self, id):
         return db.get_user_by_id(db.id_creation(id))
