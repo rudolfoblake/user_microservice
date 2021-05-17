@@ -33,7 +33,7 @@ class DataBase:
 
         try:
             user_added = self.users.insert_one(user_values).inserted_id
-            return str(user_added), 200
+            return str(user_added), 201
         except:
             return "Error: Could not create user", 400
 
@@ -45,14 +45,16 @@ class DataBase:
         :return: response, 200 -> retorna uma tupla com o usuário e o status quo, caso não encontrado,
         retorna uma mensagem relatando o mesmo.
         """
+
         try:
             response = self.users.find_one({"email": email})
+
             if response:
                 response["_id"] = str(response["_id"])
                 return response, 200
             return f"The following email: {email} does not exist", 404
         except:
-            return "Error: Could not get_user_by_email() in database", 400
+            return "Error: Could not get_user_by_email()", 400
 
     def get_user_by_id(self, id):
         """
@@ -70,7 +72,7 @@ class DataBase:
                 return response, 200
             return f"The informed id: {id}, does not exist! Try again!", 400
         except:
-            return "Error: Could not get_user_by_id() in database", 400
+            return "Error: Could not get_user_by_id()", 400
 
     def update_user_by_id(self, id, new_values):
         """
@@ -102,7 +104,7 @@ class DataBase:
                 return f"Deleted with success id: {id}", 200
             return f"Error: Id {id} does not exist, try again!", 400
         except:
-            return "Error: Could not delete_user_by_id() in database", 400
+            return "Error: Could not delete_user_by_id()", 400
 
     def id_creation(self, id):
         """
