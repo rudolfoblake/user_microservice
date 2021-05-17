@@ -48,7 +48,7 @@ def address_route():
     transfrom_to_dict = ic.json_to_dict(request)
     if transfrom_to_dict[1] != 200:
         return transfrom_to_dict
-    result = rc.add_address_route(transfrom_to_dict[0])
+    result = rc.set_address_route(transfrom_to_dict[0])
     return result
 
 

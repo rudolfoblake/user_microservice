@@ -72,7 +72,7 @@ class RouteControl:
         return get_user_by_email[0]['_id'], 200
 
 
-    def add_address_route(self, address_data):
+    def set_address_route(self, address_data):
         """Controller da rota de endereço
         Conferir os dados recebidos e atualizar o endereço do usuário no banco de dados.
 
