@@ -22,11 +22,11 @@ class RouteControl:
             return verify_user_register_user_requirements
         user_data['cpf'] = user_data['cpf'].replace(".", "").replace("-", "")
         get_email = db.get_user_by_email(user_data["email"])
-        if get_email[1] == 200:
-            if get_email[0]:
+        if not get_email[1] == 404:
+            if get_email[1] == 400:
+                return get_email
+            else:
                 return "Error: A user with that email already exists.", 400
-        else:
-            return get_email
         if not ac.password_is_encoded(user_data['password']):
             encode_password = ac.password_encode(user_data['password'])
             if encode_password == "":
@@ -38,6 +38,7 @@ class RouteControl:
     def login_route(self, user_data: dict) -> tuple:
         """Controller da rota de login
         Conferir se existe um usuário com o email enviado e verificar se a senha enviada é igual a senha do banco de dados.
+
         Args:
             user_data (dict): Dicionário com informações do usuário.
 

@@ -18,16 +18,23 @@ class TestRouteController(TestCase):
         )
         mock_verify_user_register_requirements.return_value = ("", 400)
         self.assertEqual(rc.register_route(user_data)[1], 400)
+
         mock_verify_user_register_requirements.return_value = ("", 200)
-        mock_get_user_by_email.return_value = ([''], 200)
-        self.assertEqual(rc.register_route(user_data)[1], 400)
         mock_get_user_by_email.return_value = ([''], 400)
         self.assertEqual(rc.register_route(user_data)[1], 400)
-        mock_get_user_by_email.return_value = ([], 200)
+
+        mock_get_user_by_email.return_value = ([''], 401)
+        self.assertEqual(rc.register_route(user_data)[1], 400)
+
         mock_password_is_encoded.return_value = False
         mock_password_encode.return_value = ""
+        mock_get_user_by_email.return_value = ([''], 404)
         self.assertEqual(rc.register_route(user_data)[1], 500)
+        
+
+        mock_password_is_encoded.return_value = False
         mock_password_encode.return_value = "test"
+        mock_get_user_by_email.return_value = ([''], 404)
         self.assertEqual(rc.register_route(user_data)[1], 200)
 
     @mock.patch("DataBase.dataBase.DataBase.get_user_by_email")
