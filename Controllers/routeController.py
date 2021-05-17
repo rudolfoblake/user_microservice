@@ -36,6 +36,14 @@ class RouteControl:
         return insert_user_in_database
 
     def login_route(self, user_data: dict) -> tuple:
+        """Controller da rota de login
+        Conferir se existe um usuário com o email enviado e verificar se a senha enviada é igual a senha do banco de dados.
+        Args:
+            user_data (dict): Dicionário com informações do usuário.
+
+        Returns:
+            tuple: Retorna o id do usuário conectado e o statuscode, em caso de erro retorna a mensagem de erro e o statuscode. 
+        """
         verify_user_login_requirements = ic.verify_user_login_requirements(user_data)
         if verify_user_login_requirements[1] != 200:
             return verify_user_login_requirements
