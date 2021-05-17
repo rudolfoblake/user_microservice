@@ -28,6 +28,7 @@ def register_route():
 def login_route():
     """Rota de login de usuário
     Verificar o json recebido e chamar o controller da rota de login.
+    
     Returns:
         tuple(content, statuscode): Retorna o id do usuário conectado e o statuscode, em caso de erro retorna a mensagem de erro.
     """	
