@@ -31,6 +31,14 @@ class InputControl:
                return "Error: Requirements (first_name, last_name, email, password, cpf, date_of_birth) not found at json", 400
           return "Success", 200
 
+     def verify_user_login_requirements(self, user_data: dict) -> tuple:
+          try:
+               user_data['email']
+               user_data['password']
+          except:
+               return "Error: User information (email, password) not found in json.", 400
+          return "Success", 200
+
      def verify_first_name(self, first_name: str) -> bool:
           if len(first_name) < 2 or len(first_name) > 30:
                return False
