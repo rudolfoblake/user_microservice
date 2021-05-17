@@ -86,7 +86,7 @@ class TestInputController(TestCase):
                 {
                     "address_number": 123,
                     "address_neighbourhood": "",
-                    "address_postal_code": ""
+                    "address_postal_code": 0
                 }
             ]
         )
@@ -97,7 +97,7 @@ class TestInputController(TestCase):
                 {
                     "address_number": 123,
                     "address_neighbourhood": "",
-                    "address_postal_code": 00000,
+                    "address_postal_code": "",
                     "address_city": 0
                 }
             ]
@@ -109,7 +109,7 @@ class TestInputController(TestCase):
                 {
                     "address_number": 123,
                     "address_neighbourhood": "",
-                    "address_postal_code": 00000,
+                    "address_postal_code": "",
                     "address_city": "",
                     "address_state": 0
 
@@ -123,7 +123,7 @@ class TestInputController(TestCase):
                 {
                     "address_number": 123,
                     "address_neighbourhood": "",
-                    "address_postal_code": 00000,
+                    "address_postal_code": "",
                     "address_city": "",
                     "address_state": ""
 
@@ -137,7 +137,7 @@ class TestInputController(TestCase):
                 {
                     "address_number": 123,
                     "address_neighbourhood": "",
-                    "address_postal_code": 00000,
+                    "address_postal_code": "",
                     "address_city": "",
                     "address_state": ""
 
@@ -145,7 +145,7 @@ class TestInputController(TestCase):
                 {
                     "address_number": 123,
                     "address_neighbourhood": "",
-                    "address_postal_code": 00000,
+                    "address_postal_code": "",
                     "address_city": "",
                     "address_state": ""
 

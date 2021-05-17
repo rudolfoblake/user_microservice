@@ -41,7 +41,7 @@ class InputControl:
                          return "Error: address number need be a int", 400
                     if type(address_data['address'][i]['address_neighbourhood']) != str:
                          return "Error: address neighbourhood need be a string", 400
-                    if type(address_data['address'][i]['address_postal_code']) != int:
+                    if type(address_data['address'][i]['address_postal_code']) != str:
                          return "Error: address postal code need be a int", 400
                     if type(address_data['address'][i]['address_city']) != str:
                          return "Error: address city need be a string", 400
