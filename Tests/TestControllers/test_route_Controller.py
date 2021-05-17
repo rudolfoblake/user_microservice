@@ -36,12 +36,6 @@ class TestRouteController(TestCase):
         mock_password_encode.return_value = "test"
         mock_get_user_by_email.return_value = ([''], 404)
         self.assertEqual(rc.register_route(user_data)[1], 200)
-        # mock_get_user_by_email.return_value = ([], 200)
-        # mock_password_is_encoded.return_value = False
-        # mock_password_encode.return_value = ""
-        # self.assertEqual(rc.register_route(user_data)[1], 400)
-        # mock_password_encode.return_value = "test"
-        # self.assertEqual(rc.register_route(user_data)[1], 200)
 
     @mock.patch("DataBase.dataBase.DataBase.get_user_by_email")
     @mock.patch("Controllers.authController.AuthControl.password_decode")
