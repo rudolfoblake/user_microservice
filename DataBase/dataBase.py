@@ -40,27 +40,27 @@ class DataBase:
     def get_user_by_email(self, email):
         """
         Esta função procura o usuário por e-mail informado,
-        recebe um e-mail e retorna uma tupla com o usuário e o status quo, caso não encontrado,
-        retorna uma mensagem relatando o mesmo.
+        recebe um e-mail
         :param email:
-        :return:
+        :return: response, 200 -> retorna uma tupla com o usuário e o status quo, caso não encontrado,
+        retorna uma mensagem relatando o mesmo.
         """
         try:
             response = self.users.find_one({"email": email})
             if response:
                 response["_id"] = str(response["_id"])
                 return response, 200
-            return f"The following email: {email} does not exist", 400
+            return f"The following email: {email} does not exist", 404
         except:
             return "Error: Could not get_user_by_email() in database", 400
 
     def get_user_by_id(self, id):
         """
         Esta função procura o usuário por id informado,
-        recebe um id e retorna o usuário e o status quo, caso não encontrado,
-        retorna uma mensagem relatando o mesmo.
+        recebe um id
         :param email:
-        :return:
+        :return: response, 200 -> retorna o usuário e o status quo, caso não encontrado,
+        retorna uma mensagem relatando o mesmo.
         """
         try:
             response = self.users.find_one({"_id": id})
@@ -76,10 +76,9 @@ class DataBase:
         """
         Esta função atualiuza o usuário,
         recebe um id e um dicionário com os valores a serem atualizados
-        retorna o usuário e o status quo, caso não encontrado,
-        retorna uma mensagem relatando o mesmo.
         :param email:
-        :return:
+        :return: retorna uma mensagem de update com sucesso e o status quo, caso não encontrado,
+        retorna uma mensagem relatando o mesmo.
         """
         try:
             new_values['updated_at'] = datetime.today()
@@ -93,9 +92,9 @@ class DataBase:
     def delete_user_by_id(self, id):
         """
         Esta função deleta o usuário, o achando pelo id informado.
-        retorna mensagem de erro caso nao encontrado o id.
         :param id:
-        :return:
+        :return: Retorna uma mensagem de deletado com sucesso e o status quo, caso não encontrado,
+        retorna uma mensagem relatando o mesmo.
         """
         try:
             response = self.users.delete_one({"_id": id}).deleted_count
@@ -108,9 +107,8 @@ class DataBase:
     def id_creation(self, id):
         """
         Esta função trasnforma um id string em um ObjectId
-        retorna o ObjectId
         :param id:
-        :return:
+        :return: retorna o ObjectId
         """
         try:
             return ObjectId(id)

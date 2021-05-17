@@ -17,20 +17,10 @@ class TestDataBase(TestCase):
 
             self.assertEqual(DataBase().create_user({}), ("123", 200))
 
-
-    # def create_user(self, user_values: dict):
-    #     todays_date = datetime.today()
-    #     user_values['created_at'] = todays_date
-    #     user_values['uploaded_at'] = todays_date
-    #     try:
-    #         user_added = self.db.users.insert_one(user_values).inserted_id
-    #         return str(user_added), 200
-    #     except:
-    #         return "Error: Could not create user", 400
-
-
-    def test_get_user_by_email(self):
-        pass
+    @mock.patch("DataBase.dataBase.DataBase.users", create=True)
+    def test_get_user_by_email(self, mock_databse_users):
+        with mock.patch.object(DataBase, "__init__", lambda x: None):
+            mock_databse_users.find_one.return_value = dict()
 
     def test_get_user_by_id(self):
         pass
