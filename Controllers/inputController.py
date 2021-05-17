@@ -33,8 +33,7 @@ class InputControl:
 
      def verify_address_requirements(self, address_data: dict) -> tuple:
           try:
-               if not all(char in string.ascii_letters or char in string.digits for char in address_data['_id']):
-                         return "Error: ID cannot be none", 400
+               address_data['_id']
                if not type(address_data['address']) == list:
                     return "Error: address need be a list", 400
                for i in range(len(address_data['address'])):
