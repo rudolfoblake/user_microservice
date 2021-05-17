@@ -7,3 +7,4 @@ pip install validate-docbr
 pip install email-validator
 pip install dnspython
 pip install pytest
+pip install uuid
