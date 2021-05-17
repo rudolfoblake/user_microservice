@@ -69,7 +69,7 @@ class RouteControl:
             get_user_by_email[0]['password'] = str(decode_database_password)
         if get_user_by_email[0]['password'] != user_data['password']:
             return "Error: Invalid password!", 401
-        return get_user_by_email[0]['_id'], 200
+        return get_user_by_email[0]['_id'], 201
 
 
     def get_user_by_id_route(self, id):
