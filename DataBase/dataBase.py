@@ -65,8 +65,8 @@ class DataBase:
         retorna uma mensagem relatando o mesmo.
         """
         try:
-            response = self.users.find_one({"_id": id})
-            #, {"password": 0}
+            response = self.users.find_one({"_id": id}, {"password": 0})
+
             if response:
                 response["_id"] = str(response["_id"])
                 return response, 200
