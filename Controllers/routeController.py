@@ -89,9 +89,9 @@ class RouteControl:
         if get_user_by_email[1] != 200:
             return get_user_by_email
         token = tc.generate_token(get_user_by_email[0]['_id'])
-        if not token:
+        if token == None:
             return "Error: Cannot generate token.", 500
-        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha. \n http://localhost:5030/user/auth/recover{token['token_id']}"):
+        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha. \n http://localhost:5030/user/auth/recover/{token['token_id']}"):
             return "Error: Cannot send recover email.", 400
         return "Success: Token generated with success!", 200
     

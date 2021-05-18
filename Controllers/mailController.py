@@ -10,7 +10,6 @@ class MailControl:
     def send_mail(self, receiver:str, title:str, message:str) -> bool:
         try:
             msg = MIMEMultipart()
-            message = message
             msg['From'] = SENDER
             msg['To'] = receiver
             msg['Subject'] = title
