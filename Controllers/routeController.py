@@ -83,7 +83,7 @@ class RouteControl:
             email (str): Email da conta do usuário a ser recuperada.
 
         Returns:
-            tuple: tuple(content, statuscode): Retorna o token gerado e o statuscode, em caso de erro retorna a mensagem e o statuscode.
+            tuple: tuple(content, statuscode): Retorna uma mensagem de sucesso e o statuscode, em caso de erro retorna a mensagem e o statuscode.
         """
         get_user_by_email = db.get_user_by_email(email)
         if get_user_by_email[1] != 200:
@@ -91,9 +91,9 @@ class RouteControl:
         token = tc.generate_token(get_user_by_email[0]['_id'])
         if not token:
             return "Error: Cannot generate token.", 500
-        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha. \n {token['token_id']}"):
+        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha. \n http://localhost:5030/user/auth/recover{token['token_id']}"):
             return "Error: Cannot send recover email.", 400
-        return token['token_id'], 200
+        return "Success: Token generated with success!", 200
     
     def validate_recover_route(self, token: str) -> tuple:
         """Controller da rota de verificação de token
