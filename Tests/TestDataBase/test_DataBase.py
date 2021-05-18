@@ -10,8 +10,7 @@ class TestDataBase(TestCase):
         with mock.patch.object(DataBase, "__init__", lambda x: None):
 
             mock_database_users.insert_one.return_value.inserted_id = "123"
-
-            self.assertEqual(DataBase().create_user({}), ("123", 200))
+            self.assertEqual(DataBase().create_user({}), ("123", 201))
 
             mock_database_users.insert_one.return_value = ""
             self.assertEqual(DataBase().create_user({}),
@@ -73,7 +72,6 @@ class TestDataBase(TestCase):
             mock_database_users.delete_one.return_value = ""
             self.assertEqual(DataBase().delete_user_by_id("60a1444b370ea792caef5419"),
                              ("Error: Could not delete_user_by_id()", 400))
-
 
     def test_id_creation(self):
         informed_id = "60a1444b370ea792caef5419"
