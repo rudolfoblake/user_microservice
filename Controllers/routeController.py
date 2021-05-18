@@ -75,7 +75,16 @@ class RouteControl:
             return "Error: Invalid password!", 401
         return get_user_by_email[0]['_id'], 200
 
-    def recover_route(self, email):
+    def recover_route(self, email: str) -> tuple:
+        """Controller da rota de recuperação de email
+        Receber o email, verificar a sua existencia e gerar e enviar por email um token temporário para a recuperação da conta.
+
+        Args:
+            email (str): Email da conta do usuário a ser recuperada.
+
+        Returns:
+            tuple: tuple(content, statuscode): Retorna o token gerado e o statuscode, em caso de erro retorna a mensagem e o statuscode.
+        """
         get_user_by_email = db.get_user_by_email(email)
         if get_user_by_email[1] != 200:
             return get_user_by_email
@@ -86,10 +95,20 @@ class RouteControl:
             return "Error: Cannot send recover email.", 400
         return token['token_id'], 200
     
-    def validate_recover_route(self, token):
-        if not tc.verify_token(token):
-            return "Error: Invalid token!", 400
-        return "Valid Token", 200
+    def validate_recover_route(self, token: str) -> tuple:
+        """Controller da rota de verificação de token
+        Receber o token, verificar a sua validade e retornar o id do usuário caso o token seja válido.
+
+        Args:
+            token (str): Token de recuperação de conta.
+
+        Returns:
+            tuple(content, statuscode): Retorna o ID do usuário e o statuscode, em caso de erro retorna a mensagem e o statuscode.
+        """
+        user_id = tc.verify_token(token)
+        if user_id == "":
+            return "Error: Invalid token!", 404
+        return user_id, 200
     
     def get_user_by_id_route(self, id):
         return db.get_user_by_id(db.id_creation(id))

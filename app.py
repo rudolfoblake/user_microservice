@@ -41,11 +41,29 @@ def login_route():
 
 @app.route("/user/auth/recover/<string:email>", methods=['POST'])
 def recover_route(email):
+    """Rota de Geração de token para recuperação de email
+    Chamar o controller da rota de recover.
+
+    Args:
+        email (str): Email da conta do usuário a ser recuperada.
+
+    Returns:
+        tuple(content, statuscode): Retorna o token gerado e o statuscode, em caso de erro retorna a mensagem e o statuscode.
+    """
     return rc.recover_route(email)
 
 @app.route("/user/auth/recover/<string:token>", methods=['GET'])
 def validate_recover_route(token):
-    return validate_recover_route(token)
+    """Rota de validação de token
+    Chamar o controller da rota de validate recover.
+
+    Args:
+        token (str): Token de recuperação de email.
+
+    Returns:
+        tuple(content, statuscode): Retorna o ID do usuário e o statuscode, em caso de erro retorna a mensagem e o statuscode.
+    """
+    return rc.validate_recover_route(token)
 
 @app.route("/user/<string:id>")
 def get_user_by_id_route(id):

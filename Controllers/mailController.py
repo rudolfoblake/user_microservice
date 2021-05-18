@@ -4,7 +4,8 @@ import smtplib
 
 SENDER = "livroparatodxs@outlook.com"
 PASSWORD = "zFD9L2Y@bRt5"
- 
+
+
 class MailControl:
     def send_mail(self, receiver:str, title:str, message:str) -> bool:
         try:
