@@ -81,5 +81,20 @@ class RouteControl:
         return get_user_by_email[0]['_id'], 200
 
 
+    def set_address_route(self, address_data):
+        """Controller da rota de endereço
+        Conferir os dados recebidos e atualizar o endereço do usuário no banco de dados.
+
+        Args:
+            address_data (dict): Dicionário com informações do endereço.
+
+        Returns:
+            tuple: Retornar o ID do usuário que teve o endereço alterado com o código 200, retornando em caso de problema uma mensagem de erro e o statuscode.
+        """
+        verify_address = ic.verify_address_requirements(address_data)
+        if verify_address[1] != 200:
+            return verify_address
+        return db.update_user_by_id(db.id_creation(address_data['_id']), dict(address=address_data['address']))
+
     def get_user_by_id_route(self, id):
         return db.get_user_by_id(db.id_creation(id))
