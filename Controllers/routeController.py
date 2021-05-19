@@ -4,7 +4,10 @@ from DataBase import dataBase
 db = dataBase.DataBase()
 from Controllers import authController
 ac = authController.AuthControl()
-
+from Controllers import mailController
+mc = mailController.MailControl()
+from Controllers import tokenController
+tc = tokenController.Token()
 
 class RouteControl:
     def register_route(self, user_data: dict) -> tuple:
@@ -72,7 +75,41 @@ class RouteControl:
             return "Error: Invalid password!", 401
         return get_user_by_email[0]['_id'], 200
 
+    def recover_route(self, email: str) -> tuple:
+        """Controller da rota de recuperação de email
+        Receber o email, verificar a sua existencia e gerar e enviar por email um token temporário para a recuperação da conta.
 
+        Args:
+            email (str): Email da conta do usuário a ser recuperada.
+
+        Returns:
+            tuple: tuple(content, statuscode): Retorna uma mensagem de sucesso e o statuscode, em caso de erro retorna a mensagem e o statuscode.
+        """
+        get_user_by_email = db.get_user_by_email(email)
+        if get_user_by_email[1] != 200:
+            return get_user_by_email
+        token = tc.generate_token(get_user_by_email[0]['_id'])
+        if token == None:
+            return "Error: Cannot generate token.", 500
+        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha.\n\nhttp://localhost:5030/user/auth/token/{token['token_id']}\n\nLembrando que seu link é valido por 15 minutos!"):
+            return "Error: Cannot send recover email.", 400
+        return "Success: Token generated with success!", 200
+    
+    def validate_recover_route(self, token: str) -> tuple:
+        """Controller da rota de verificação de token
+        Receber o token, verificar a sua validade e retornar o id do usuário caso o token seja válido.
+
+        Args:
+            token (str): Token de recuperação de conta.
+
+        Returns:
+            tuple(content, statuscode): Retorna o ID do usuário e o statuscode, em caso de erro retorna a mensagem e o statuscode.
+        """
+        user_id = tc.verify_token(token)
+        if user_id == "":
+            return "Error: Invalid token!", 404
+        return user_id, 200
+    
     def set_address_route(self, address_data):
         """Controller da rota de endereço
         Conferir os dados recebidos e atualizar o endereço do usuário no banco de dados.
