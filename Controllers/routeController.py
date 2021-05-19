@@ -27,11 +27,17 @@ class RouteControl:
                 return get_email
             else:
                 return "Error: A user with that email already exists.", 400
-        if not ac.password_is_encoded(user_data['password']):
-            encode_password = ac.password_encode(user_data['password'])
-            if encode_password == "":
-                return "Error: Failed to encode password!", 500
-            user_data['password'] = str(encode_password)
+        # if not ac.password_is_encoded(user_data['password']):
+        #     encode_password = ac.password_encode(user_data['password'])
+        #     if encode_password == "":
+        #         return "Error: Failed to encode password!", 500
+        #     user_data['password'] = str(encode_password)
+        if ac.password_is_encoded(user_data['password']):
+            decoded_password = ac.password_decode(user_data['password'])
+            if decoded_password == "":
+                return "Error: Failed to decode password!", 500
+            user_data['password'] = decoded_password
+        user_data = ic.encript_register_data(user_data)
         insert_user_in_database = db.create_user(user_data)
         return insert_user_in_database
 
@@ -68,6 +74,8 @@ class RouteControl:
             if decode_database_password == "":
                 return "Error: Failed to decode database password!", 500
             get_user_by_email[0]['password'] = str(decode_database_password)
+        if ac.is_encripted(get_user_by_email[0]['password']):
+            get_user_by_email[0]['password'] = ac.decript(get_user_by_email[0]['password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
         if get_user_by_email[0]['password'] != user_data['password']:
             return "Error: Invalid password!", 401
         return get_user_by_email[0]['_id'], 200

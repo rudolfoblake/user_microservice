@@ -15,7 +15,7 @@ class AuthControl:
             return False
         return True
 
-    def password_decode(self, password: str) -> str:
+    def password_decode(self, password: bytes) -> str:
         try:
             return base64.b64decode(password.encode("utf8")).decode("utf8")
         except:
@@ -27,7 +27,7 @@ class AuthControl:
         token = f.encrypt(bytes(content.encode()))
         return token
         
-    def isencripted(self, content:str) -> bool:
+    def is_encripted(self, content:str) -> bool:
         if type(content) == bytes:
             return True
         return False
