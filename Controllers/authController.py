@@ -21,17 +21,17 @@ class AuthControl:
         except:
             return ""
 
-    def encript(self, content:str, key:str) -> bytes:
+    def encrypt(self, content:str, key:str) -> bytes:
         key = bytes(key.encode())
         f = Fernet(key)
         token = f.encrypt(bytes(content.encode()))
         return token
         
-    def is_encripted(self, content:str) -> bool:
+    def is_encrypted(self, content:str) -> bool:
         if type(content) == bytes:
             return True
         return False
 
-    def decript(self, content:str, key:bytes) -> str:
+    def decrypt(self, content:str, key:bytes) -> str:
         f = Fernet(key)
         return str(f.decrypt(content).decode())
