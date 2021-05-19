@@ -38,6 +38,22 @@ def login_route():
     result = rc.login_route(transfrom_to_dict[0])
     return result
 
+@app.route("/user/auth/token/<string:value>", methods=['POST', 'GET'])
+def validate_recover_route(value):
+    """Rota de geração/validação de token
+    Chamar o controller da rota de gerar/validar token.
+
+    Args:
+        value (str): Email a receber o token / Token a ser validado.
+
+    Returns:
+        tuple(content, statuscode): Retorna o ID do usuário e o statuscode, em caso de erro retorna a mensagem e o statuscode.
+    """
+    if request.method == "POST":
+        return rc.recover_route(value)
+    elif request.method == "GET":
+        return rc.validate_recover_route(value)
+        
 @app.route("/user/address", methods=['POST', 'PUT'])
 def address_route():
     """Rota de Cadastro/Atualização de Endereço
