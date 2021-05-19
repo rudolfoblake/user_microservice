@@ -9,3 +9,4 @@ pip install dnspython
 pip install pytest
 pip install coverage
 pip install requests
+pip install pytest-cov
