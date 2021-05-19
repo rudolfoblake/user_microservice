@@ -53,6 +53,21 @@ def validate_recover_route(value):
         return rc.recover_route(value)
     elif request.method == "GET":
         return rc.validate_recover_route(value)
+        
+@app.route("/user/address", methods=['POST', 'PUT'])
+def address_route():
+    """Rota de Cadastro/Atualização de Endereço
+    Verificar o json recebido e chamar o controller da rota de endereço.
+
+    Returns:
+        tuple(content, statuscode): Retorna o id do usuário conectado e o statuscode, em caso de erro retorna a mensagem de erro.
+    """
+    transfrom_to_dict = ic.json_to_dict(request)
+    if transfrom_to_dict[1] != 200:
+        return transfrom_to_dict
+    result = rc.set_address_route(transfrom_to_dict[0])
+    return result
+
 
 @app.route("/user/<string:id>")
 def get_user_by_id_route(id):

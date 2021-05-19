@@ -34,7 +34,7 @@ class TestInputController(TestCase):
             cpf="",
             date_of_birth=""
         )
-        self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 201)
+        self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 200)
         mock_verify_first_name.return_value = False
         self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 400)
         mock_verify_first_name.return_value = True
@@ -53,7 +53,106 @@ class TestInputController(TestCase):
         mock_verify_password.return_value = False
         self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 400)
 
+    def test_verify_address_requirements_works(self):
+        address_data = dict()
+        self.assertEqual(ic.verify_address_requirements(address_data)[1], 400)
+        address_data = dict(
+            _id="3AWUsCCwog9cj5NBim8j",
+            address=""
+        )
+        self.assertEqual(ic.verify_address_requirements(address_data)[1], 400)
+        address_data = dict(
+            _id="3AWUsCCwog9cj5NBim8j",
+            address=[
+                {
+                    "address_number": ""
+                }
+            ]
+        )
+        self.assertEqual(ic.verify_address_requirements(address_data)[1], 400)
+        address_data = dict(
+            _id="3AWUsCCwog9cj5NBim8j",
+            address=[
+                {
+                    "address_number": 123,
+                    "address_neighbourhood": 1
+                }
+            ]
+        )
+        self.assertEqual(ic.verify_address_requirements(address_data)[1], 400)
+        address_data = dict(
+            _id="3AWUsCCwog9cj5NBim8j",
+            address=[
+                {
+                    "address_number": 123,
+                    "address_neighbourhood": "",
+                    "address_postal_code": 0
+                }
+            ]
+        )
+        self.assertEqual(ic.verify_address_requirements(address_data)[1], 400)
+        address_data = dict(
+            _id="3AWUsCCwog9cj5NBim8j",
+            address=[
+                {
+                    "address_number": 123,
+                    "address_neighbourhood": "",
+                    "address_postal_code": "",
+                    "address_city": 0
+                }
+            ]
+        )
+        self.assertEqual(ic.verify_address_requirements(address_data)[1], 400)
+        address_data = dict(
+            _id="3AWUsCCwog9cj5NBim8j",
+            address=[
+                {
+                    "address_number": 123,
+                    "address_neighbourhood": "",
+                    "address_postal_code": "",
+                    "address_city": "",
+                    "address_state": 0
 
+                }
+            ]
+        )
+        self.assertEqual(ic.verify_address_requirements(address_data)[1], 400)
+        address_data = dict(
+            _id="3AWUsCCwog9cj5NBim8j",
+            address=[
+                {
+                    "address_number": 123,
+                    "address_neighbourhood": "",
+                    "address_postal_code": "",
+                    "address_city": "",
+                    "address_state": ""
+
+                }
+            ]
+        )
+        self.assertEqual(ic.verify_address_requirements(address_data)[1], 200)
+        address_data = dict(
+            _id="3AWUsCCwog9cj5NBim8j",
+            address=[
+                {
+                    "address_number": 123,
+                    "address_neighbourhood": "",
+                    "address_postal_code": "",
+                    "address_city": "",
+                    "address_state": ""
+
+                },
+                {
+                    "address_number": 123,
+                    "address_neighbourhood": "",
+                    "address_postal_code": "",
+                    "address_city": "",
+                    "address_state": ""
+
+                }
+            ]
+        )
+        self.assertEqual(ic.verify_address_requirements(address_data)[1], 200)
 
     def test_verify_first_name_works(self):
         self.assertFalse(ic.verify_first_name(" "))

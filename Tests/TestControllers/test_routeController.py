@@ -41,7 +41,7 @@ class TestRouteController(TestCase):
         mock_password_is_encoded.return_value = False
         mock_password_encode.return_value = "test"
         mock_get_user_by_email.return_value = ([''], 404)
-        self.assertEqual(rc.register_route(user_data)[1], 200)
+        self.assertEqual(rc.register_route(user_data)[1], 201)
 
 
     @mock.patch("DataBase.dataBase.DataBase.id_creation")
@@ -86,6 +86,7 @@ class TestRouteController(TestCase):
         mock_password_decode.side_effect = ["x", "x"]
         self.assertEqual(rc.login_route(user_data)[1], 200)
 
+<<<<<<< HEAD:Tests/TestControllers/test_routeController.py
     @mock.patch("Controllers.mailController.MailControl.send_mail")
     @mock.patch("Controllers.tokenController.Token.generate_token")
     @mock.patch("DataBase.dataBase.DataBase.get_user_by_email")
@@ -126,3 +127,14 @@ class TestRouteController(TestCase):
 
 
 
+=======
+    @mock.patch("DataBase.dataBase.DataBase.update_user_by_id")
+    @mock.patch("Controllers.inputController.InputControl.verify_address_requirements")
+    def test_set_address_route_works(self, mock_verify_address, mock_update_user_by_id):
+        mock_verify_address.return_value = ("", 400)
+        address_data = dict(_id="gpwc6vvVtaGGxevXMfZV", address=[])
+        self.assertEqual(rc.set_address_route(address_data)[1], 400)
+        mock_verify_address.return_value = ("", 200)
+        mock_update_user_by_id.return_value = ("", 200)
+        self.assertEqual(rc.set_address_route(address_data)[1], 200)
+>>>>>>> 9d7919c08b385d1f59516b6c01c5d5c42fc15c5d:Tests/TestControllers/test_route_Controller.py

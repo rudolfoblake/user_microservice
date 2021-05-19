@@ -57,7 +57,7 @@ class RouteControl:
                 return "Error: Failed to decode password!", 500
             user_data['password'] = str(decode_password)
         get_user_by_email = db.get_user_by_email(user_data["email"])
-        if get_user_by_email[1] == 200:
+        if get_user_by_email[1] == 200 or get_user_by_email[1] == 201:
             if not get_user_by_email[0]:
                 return "Error: A user with that email does not exists.", 400
         else:
@@ -110,5 +110,20 @@ class RouteControl:
             return "Error: Invalid token!", 404
         return user_id, 200
     
+    def set_address_route(self, address_data):
+        """Controller da rota de endereço
+        Conferir os dados recebidos e atualizar o endereço do usuário no banco de dados.
+
+        Args:
+            address_data (dict): Dicionário com informações do endereço.
+
+        Returns:
+            tuple: Retornar o ID do usuário que teve o endereço alterado com o código 200, retornando em caso de problema uma mensagem de erro e o statuscode.
+        """
+        verify_address = ic.verify_address_requirements(address_data)
+        if verify_address[1] != 200:
+            return verify_address
+        return db.update_user_by_id(db.id_creation(address_data['_id']), dict(address=address_data['address']))
+
     def get_user_by_id_route(self, id):
         return db.get_user_by_id(db.id_creation(id))
