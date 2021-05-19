@@ -34,7 +34,7 @@ class TestInputController(TestCase):
             cpf="",
             date_of_birth=""
         )
-        self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 201)
+        self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 200)
         mock_verify_first_name.return_value = False
         self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 400)
         mock_verify_first_name.return_value = True

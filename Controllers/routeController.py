@@ -54,7 +54,7 @@ class RouteControl:
                 return "Error: Failed to decode password!", 500
             user_data['password'] = str(decode_password)
         get_user_by_email = db.get_user_by_email(user_data["email"])
-        if get_user_by_email[1] == 200:
+        if get_user_by_email[1] == 200 or get_user_by_email[1] == 201:
             if not get_user_by_email[0]:
                 return "Error: A user with that email does not exists.", 400
         else:
