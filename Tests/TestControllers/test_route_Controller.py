@@ -86,3 +86,12 @@ class TestRouteController(TestCase):
         mock_password_decode.side_effect = ["x", "x"]
         self.assertEqual(rc.login_route(user_data)[1], 200)
 
+    @mock.patch("DataBase.dataBase.DataBase.update_user_by_id")
+    @mock.patch("Controllers.inputController.InputControl.verify_address_requirements")
+    def test_set_address_route_works(self, mock_verify_address, mock_update_user_by_id):
+        mock_verify_address.return_value = ("", 400)
+        address_data = dict(_id="gpwc6vvVtaGGxevXMfZV", address=[])
+        self.assertEqual(rc.set_address_route(address_data)[1], 400)
+        mock_verify_address.return_value = ("", 200)
+        mock_update_user_by_id.return_value = ("", 200)
+        self.assertEqual(rc.set_address_route(address_data)[1], 200)
