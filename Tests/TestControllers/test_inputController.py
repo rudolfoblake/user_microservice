@@ -34,7 +34,7 @@ class TestInputController(TestCase):
             cpf="",
             date_of_birth=""
         )
-        self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 200)
+        self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 201)
         mock_verify_first_name.return_value = False
         self.assertEqual(ic.verify_user_register_requirements(req_values)[1], 400)
         mock_verify_first_name.return_value = True
@@ -190,3 +190,9 @@ class TestInputController(TestCase):
         self.assertFalse(ic.validate_date_of_birth("12/32/0000"))
         self.assertFalse(ic.validate_date_of_birth("12/31/0000"))
         self.assertTrue(ic.validate_date_of_birth("12/20/2010"))
+
+    def test_verify_user_login_requirements_works(self):
+        user_data = dict()
+        self.assertEqual(ic.verify_user_login_requirements(user_data)[1], 400)
+        user_data = dict(email="", password="")
+        self.assertEqual(ic.verify_user_login_requirements(user_data)[1], 200)
