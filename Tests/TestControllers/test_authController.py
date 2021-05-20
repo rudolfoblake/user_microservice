@@ -22,7 +22,8 @@ class TestAuthController(TestCase):
     def test_access_key_validation_works(self):
         self.assertTrue(ac.access_key_validation(dict(Key=KEY)))
         self.assertFalse(ac.access_key_validation(dict(Key="AccessKey")))
-        self.assertFalse(ac.access_key_validation(dict(Key="")))
+        self.assertFalse(ac.access_key_validation(dict()))
+
     @mock.patch("Controllers.authController.Fernet")
     def test_encrypt_works(self, mock_Fernet):
         mock_Fernet.return_value = mock.MagicMock()
