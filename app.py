@@ -76,4 +76,4 @@ def get_user_by_id_route(id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="localhost", port=5030)
+    app.run(debug=True, host="192.168.0.74", port=5030)
