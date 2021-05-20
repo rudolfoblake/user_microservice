@@ -82,15 +82,25 @@ class TestDataBase(TestCase):
         self.assertEqual(DataBase().id_creation(informed_id),
                          ("Id is not valid, review your id: 123 and try again!", 400))
 
-
     @mock.patch("DataBase.dataBase.DataBase.convert_list_id_to_objectId")
     @mock.patch("DataBase.dataBase.DataBase.users", create=True)
     def test_find_users_by_id(self, mock_database_users, mock_list_id):
         with mock.patch.object(DataBase, "__init__", lambda x: None):
+            database_returne = [
+                dict(
+                    first_name="name1",
+                    email="email1"
+                ),
+                dict(
+                    first_name="name2",
+                    email="email2"
+                )
+            ]
             mock_list_id.return_value = [ObjectId("60a69dcc01d6c1f3dbdedba0")]
-            mock_database_users.find.return_value = ""
+            mock_database_users.find.return_value = database_returne
 
-            self.assertEqual(DataBase().find_users_by_id([""]), {})
+
+            self.assertEqual(DataBase().find_users_by_id([])[1], 200)
 
 
     def test_convert_list_id_to_objectId(self):

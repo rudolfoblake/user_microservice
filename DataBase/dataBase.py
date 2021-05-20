@@ -130,14 +130,12 @@ class DataBase:
         list_objectId = self.convert_list_id_to_objectId(list_id)    
         
         try:            
-            response = self.users.find({"_id":{"$in":list_objectId}}, {"email": 1, "first_name": 1, "_id": 1})                       
-            print(type(response))
-            if response.count() > 0:                
-                for users in response:
-                    list_users.append(dict(first_name=users['first_name'], email=users['email']))                    
-
-                return dict(users=list_users), 200
-            return f"The informed id: {id}, does not exist! Try again!", 400
+            response = self.users.find({"_id":{"$in":list_objectId}}, {"email": 1, "first_name": 1, "_id": 1})           
+            for users in response:
+                list_users.append(dict(first_name=users['first_name'], email=users['email']))
+            if not len(list_users) > 0:
+                return "Error...", 404      
+            return dict(users=list_users), 200
         except Exception as error:
             return str(error), 400
 
