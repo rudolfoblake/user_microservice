@@ -25,7 +25,7 @@ class TestTokenController(TestCase):
 
     def test_generate_token_works(self):
         user_id = "UWfDaRdIdzhGaNeMTX9L"
-        self.assertEqual(tk.generate_token(user_id)['user_id'], user_id)
+        self.assertEqual(tk.generate_token(user_id, "test")['user_id'], user_id)
 
     def test_verify_token_works(self):
         token = {
@@ -33,6 +33,6 @@ class TestTokenController(TestCase):
                 "user_id": "UWfDaRdIdzhGaNeMTX9L",
                 "expire": 14868846548.185464 #Validade de 15 minutos nos tokens
             }
-        self.assertEqual(tk.verify_token(token['token_id']), "")
+        self.assertEqual(tk.verify_token(token['token_id']), )
         tk.save_token(token)
         self.assertEqual(tk.verify_token(token['token_id']), token['user_id'])

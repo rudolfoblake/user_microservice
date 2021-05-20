@@ -62,7 +62,8 @@ class TestRouteController(TestCase):
     def test_login_route_works(self, mock_verify_user_login_requirements, mock_password_is_encoded, mock_password_decode, mock_get_user_by_email):
         user_data = dict(
             email="",
-            password=""
+            password="",
+            verified=True
         )
         mock_verify_user_login_requirements.return_value = ("", 400)
         self.assertEqual(rc.login_route(user_data)[1], 400)
@@ -89,39 +90,40 @@ class TestRouteController(TestCase):
     @mock.patch("Controllers.mailController.MailControl.send_mail")
     @mock.patch("Controllers.tokenController.Token.generate_token")
     @mock.patch("DataBase.dataBase.DataBase.get_user_by_email")
-    def test_recover_route_works(self, mock_get_user_by_email, mock_generate_token, mock_send_mail):
+    def test_create_token_works(self, mock_get_user_by_email, mock_generate_token, mock_send_mail):
         token = {
                 "token_id": "XjfWHiXtQltejTQpPXSp",
                 "user_id": "UWfDaRdIdzhGaNeMTX9L",
-                "expire": 14868846548.185464 #Validade de 15 minutos nos tokens
+                "expire": 14868846548.185464, #Validade de 15 minutos nos tokens
+                "action": "test"
             }
         mock_get_user_by_email.return_value = ("", 404)
-        self.assertEqual(rc.recover_route("myemail@email.com")[1], 404)
+        self.assertEqual(rc.create_token("myemail@email.com", "test")[1], 404)
 
         mock_get_user_by_email.return_value = ({"_id":"UWfDaRdIdzhGaNeMTX9L"}, 200)
         mock_generate_token.return_value = None
-        self.assertEqual(rc.recover_route("myemail@email.com")[1], 500)
+        self.assertEqual(rc.create_token("myemail@email.com", "test")[1], 500)
 
         mock_get_user_by_email.return_value = ({"_id":"UWfDaRdIdzhGaNeMTX9L", "first_name": "Carlos"}, 200)
         mock_generate_token.return_value = token
         mock_send_mail.return_value = False
-        self.assertEqual(rc.recover_route("myemail@email.com")[1], 400)
+        self.assertEqual(rc.create_token("myemail@email.com", "test")[1], 400)
 
         mock_get_user_by_email.return_value = ({"_id":"UWfDaRdIdzhGaNeMTX9L", "first_name": "Carlos"}, 200)
         mock_generate_token.return_value = token
         mock_send_mail.return_value = True
-        self.assertEqual(rc.recover_route("myemail@email.com")[1], 200)
+        self.assertEqual(rc.create_token("myemail@email.com", "test")[1], 200)
 
     @mock.patch("Controllers.tokenController.Token.verify_token")
-    def test_validate_recover_route_works(self, mock_verify_token):
+    def test_validate_token_works(self, mock_verify_token):
         token_id = "yj39iB36iT9CRjqVBbmE"
         user_id = "Uh4QLMyg97WIvVCEPnE4"
         mock_verify_token.return_value = ""
-        self.assertEqual(rc.validate_recover_route(token_id)[1], 404)
+        self.assertEqual(rc.validate_token(token_id, "test")[1], 404)
 
         mock_verify_token.return_value = user_id
-        self.assertEqual(rc.validate_recover_route(token_id)[1], 200)
-        self.assertEqual(rc.validate_recover_route(token_id)[0], user_id)
+        self.assertEqual(rc.validate_token(token_id, "test")[1], 200)
+        self.assertEqual(rc.validate_token(token_id, "test")[0], user_id)
 
     @mock.patch("DataBase.dataBase.DataBase.update_user_by_id")
     @mock.patch("Controllers.inputController.InputControl.verify_address_requirements")

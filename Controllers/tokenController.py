@@ -23,7 +23,7 @@ class Token:
         """
         tokens.pop(token_index)
 
-    def generate_token(self, user_id:str) -> dict:
+    def generate_token(self, user_id:str, action:str) -> dict:
         """Método para gerar um novo token
         Gerar um novo token com um id aleatório, o id do usuário e a validade.
 
@@ -36,12 +36,13 @@ class Token:
         token = {
                 "token_id": uuid.uuid4().hex,
                 "user_id": user_id,
+                "action": action,
                 "expire": time.time() + (15 * 60) #Validade de 15 minutos nos tokens
             }
         self.save_token(token)
         return token
 
-    def verify_token(self, token_id:str) -> str:
+    def verify_token(self, token_id:str, action:str) -> str:
         """Método para verificar a validade do token
         Verificar se o token existe e se é válido.
 
@@ -51,13 +52,13 @@ class Token:
         Returns:
             str: Retorna o ID do usuário caso o token seja válido ou uma string vázia caso não seja.
         """
-        user_id = ""
+        selected_token = dict()
         for i in range(len(tokens)):
             if token_id == tokens[i]['token_id']:
-                if tokens[i]['expire'] >= time.time():
+                if tokens[i]['expire'] >= time.time() and tokens[i]['action'] == action:
                     is_valid = True
-                    selected_token = i
-                    user_id = tokens[i]['user_id']
-        if user_id != "":
-            self.delete_token(selected_token)
-        return user_id
+                    selected_token_index = i
+                    selected_token = tokens[i]
+        if len(selected_token) > 0:
+            self.delete_token(selected_token_index)
+        return selected_token

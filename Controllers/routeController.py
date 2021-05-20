@@ -35,8 +35,15 @@ class RouteControl:
             if decoded_password == "":
                 return "Error: Failed to decode password!", 500
             user_data['password'] = decoded_password
+        user_data['verified'] = False
         user_data = ic.encrypt_register_data(user_data)
         insert_user_in_database = db.create_user(user_data)
+        if insert_user_in_database[1] == 200 or insert_user_in_database[1] == 201:
+            token = tc.generate_token(insert_user_in_database[0], "confirmation")
+            if token == None:
+                return "Error: Cannot generate token.", 500
+            if not mc.send_mail(user_data['email'], "Confirmação de Conta Livro para Todxs", f"Olá {user_data['first_name']}, clique no link a baixo para verificar a sua conta.\n\nhttp://localhost:5030/user/auth/token/{token['token_id']}\n\nLembrando que seu link é valido por 15 minutos!"):
+                return "Error: Cannot send recover email.", 400
         return insert_user_in_database
 
     def login_route(self, user_data: dict) -> tuple:
@@ -76,14 +83,16 @@ class RouteControl:
             get_user_by_email[0]['password'] = ac.decrypt(get_user_by_email[0]['password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
         if get_user_by_email[0]['password'] != user_data['password']:
             return "Error: Invalid password!", 401
+        if get_user_by_email[0]['verified'] == False:
+            return "Error: Email not verified.", 403
         return get_user_by_email[0]['_id'], 200
 
-    def recover_route(self, email: str) -> tuple:
-        """Controller da rota de recuperação de email
-        Receber o email, verificar a sua existencia e gerar e enviar por email um token temporário para a recuperação da conta.
+    def create_token(self, email: str, action: str) -> tuple:
+        """Controller da rota de criação de token
+        Receber o email, verificar a sua existencia e gerar e enviar por email um token temporário.
 
         Args:
-            email (str): Email da conta do usuário a ser recuperada.
+            email (str): Email da conta do usuário.
 
         Returns:
             tuple: tuple(content, statuscode): Retorna uma mensagem de sucesso e o statuscode, em caso de erro retorna a mensagem e o statuscode.
@@ -91,14 +100,14 @@ class RouteControl:
         get_user_by_email = db.get_user_by_email(email)
         if get_user_by_email[1] != 200:
             return get_user_by_email
-        token = tc.generate_token(get_user_by_email[0]['_id'])
+        token = tc.generate_token(get_user_by_email[0]['_id'], action)
         if token == None:
             return "Error: Cannot generate token.", 500
         if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha.\n\nhttp://localhost:5030/user/auth/token/{token['token_id']}\n\nLembrando que seu link é valido por 15 minutos!"):
             return "Error: Cannot send recover email.", 400
         return "Success: Token generated with success!", 200
     
-    def validate_recover_route(self, token: str) -> tuple:
+    def validate_token(self, token: str, action: str) -> tuple:
         """Controller da rota de verificação de token
         Receber o token, verificar a sua validade e retornar o id do usuário caso o token seja válido.
 
@@ -108,10 +117,12 @@ class RouteControl:
         Returns:
             tuple(content, statuscode): Retorna o ID do usuário e o statuscode, em caso de erro retorna a mensagem e o statuscode.
         """
-        user_id = tc.verify_token(token)
-        if user_id == "":
+        token_data = tc.verify_token(token, action)
+        if not len(token_data) > 0:
             return "Error: Invalid token!", 404
-        return user_id, 200
+        if token['action'] == "verify":
+            db.update_user_by_id(token['user_id'], {"verified": True})
+        return token_data, 200
     
     def set_address_route(self, address_data):
         """Controller da rota de endereço

@@ -38,9 +38,9 @@ def login_route():
     result = rc.login_route(transfrom_to_dict[0])
     return result
 
-@app.route("/user/auth/token/<string:value>", methods=['POST', 'GET'])
+@app.route("/user/auth/recover/<string:value>", methods=['POST', 'GET'])
 def validate_recover_route(value):
-    """Rota de geração/validação de token
+    """Rota de geração/validação de token para recuperação de conta
     Chamar o controller da rota de gerar/validar token.
 
     Args:
@@ -50,9 +50,25 @@ def validate_recover_route(value):
         tuple(content, statuscode): Retorna o ID do usuário e o statuscode, em caso de erro retorna a mensagem e o statuscode.
     """
     if request.method == "POST":
-        return rc.recover_route(value)
+        return rc.create_token(value, "recover")
     elif request.method == "GET":
-        return rc.validate_recover_route(value)
+        return rc.validate_token(value, "recover")
+
+@app.route("/user/auth/validate/<string:value>", methods=['POST', 'GET'])
+def validate_recover_route(value):
+    """Rota de geração/validação de token para verificação de conta
+    Chamar o controller da rota de gerar/validar token.
+
+    Args:
+        value (str): Email a receber o token / Token a ser validado.
+
+    Returns:
+        tuple(content, statuscode): Retorna o ID do usuário e o statuscode, em caso de erro retorna a mensagem e o statuscode.
+    """
+    if request.method == "POST":
+        return rc.create_token(value, "verify")
+    elif request.method == "GET":
+        return rc.validate_token(value, "verify")
         
 @app.route("/user/address", methods=['POST', 'PUT'])
 def address_route():
