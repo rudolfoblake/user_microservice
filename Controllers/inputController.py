@@ -198,7 +198,7 @@ class InputControl:
                user_data['password'] = ac.encrypt(user_data['password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
           try:
                if not ac.is_encrypted(user_data['phone_number']):
-                    user_data['password'] = ac.encrypt(user_data['password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+                    user_data['phone_number'] = ac.encrypt(user_data['phone_number'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
           except:
                pass
           return user_data
