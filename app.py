@@ -1,11 +1,11 @@
-import json
-import requests
-import base64
+import os
 from flask import Flask, request
 from Controllers import routeController
 rc = routeController.RouteControl()
 from Controllers import inputController
 ic = inputController.InputControl()
+
+os.system("python -m pytest")
 
 app = Flask(__name__)
 
