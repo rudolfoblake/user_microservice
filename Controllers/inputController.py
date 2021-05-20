@@ -1,6 +1,8 @@
 import json
 from validate_docbr import CPF
 from email_validator import validate_email, EmailNotValidError
+from Controllers import authController
+ac = authController.AuthControl()
 import datetime
 import string
 import re
@@ -184,3 +186,19 @@ class InputControl:
           except:
                return False
           return True
+
+     def encrypt_register_data(self, user_data:dict) -> dict:
+          if not ac.is_encrypted(user_data['first_name']):
+               user_data['first_name'] = ac.encrypt(user_data['first_name'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          if not ac.is_encrypted(user_data['last_name']):
+               user_data['last_name'] = ac.encrypt(user_data['last_name'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          if not ac.is_encrypted(user_data['cpf']):
+               user_data['cpf'] = ac.encrypt(user_data['cpf'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          if not ac.is_encrypted(user_data['password']):
+               user_data['password'] = ac.encrypt(user_data['password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          try:
+               if not ac.is_encrypted(user_data['phone_number']):
+                    user_data['password'] = ac.encrypt(user_data['password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          except:
+               pass
+          return user_data
