@@ -196,3 +196,51 @@ class TestInputController(TestCase):
         self.assertEqual(ic.verify_user_login_requirements(user_data)[1], 400)
         user_data = dict(email="", password="")
         self.assertEqual(ic.verify_user_login_requirements(user_data)[1], 200)
+
+    @mock.patch("Controllers.authController.AuthControl.encrypt")
+    @mock.patch("Controllers.authController.AuthControl.is_encrypted")
+    def test_encrypt_register_data_works(self, mock_is_encrypted, mock_encrypt):
+        user_data = dict(
+            first_name="Carlos",
+            last_name="Jose",
+            cpf="0000000000",
+            password="123456",
+            phone_number="123456789"
+        )
+        encripted_user_data = dict(
+            first_name=bytes("Carlos".encode()),
+            last_name=bytes("Jose".encode()),
+            cpf=bytes("0000000000".encode()),
+            password=bytes("123456".encode()),
+            phone_number=bytes("123456789".encode())
+        )
+
+        mock_is_encrypted.return_value = False
+        mock_encrypt.side_effect = [
+            encripted_user_data['first_name'],
+            encripted_user_data['last_name'],
+            encripted_user_data['cpf'],
+            encripted_user_data['password'],
+            encripted_user_data['phone_number']
+        ]
+        self.assertEqual(ic.encrypt_register_data(user_data), encripted_user_data)
+
+        user_data = dict(
+            first_name="Carlos",
+            last_name="Jose",
+            cpf="0000000000",
+            password="123456"
+        )
+        encripted_user_data = dict(
+            first_name=bytes("Carlos".encode()),
+            last_name=bytes("Jose".encode()),
+            cpf=bytes("0000000000".encode()),
+            password=bytes("123456".encode())
+        )
+        mock_encrypt.side_effect = [
+            encripted_user_data['first_name'],
+            encripted_user_data['last_name'],
+            encripted_user_data['cpf'],
+            encripted_user_data['password']
+        ]
+        self.assertEqual(ic.encrypt_register_data(user_data), encripted_user_data)

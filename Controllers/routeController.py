@@ -67,7 +67,7 @@ class RouteControl:
             get_user_by_email[0]['password']
         except:
             return "Error: Cannot get password from user on database to compare.", 500
-        if ac.password_is_encoded(get_user_by_email[0]['password']):
+        if ac.password_is_encoded(get_user_by_email[0]['password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY="):
             decode_database_password = ac.password_decode(get_user_by_email[0]['password'])
             if decode_database_password == "":
                 return "Error: Failed to decode database password!", 500

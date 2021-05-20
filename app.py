@@ -4,6 +4,8 @@ rc = routeController.RouteControl()
 from Controllers import inputController
 ic = inputController.InputControl()
 
+os.system("python -m pytest")
+
 app = Flask(__name__)
 
 
