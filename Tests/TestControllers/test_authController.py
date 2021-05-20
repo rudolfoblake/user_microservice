@@ -21,3 +21,4 @@ class TestAuthController(TestCase):
     def test_access_key_validation_works(self):
         self.assertTrue(ac.access_key_validation(dict(Key=KEY)))
         self.assertFalse(ac.access_key_validation(dict(Key="AccessKey")))
+        self.assertFalse(ac.access_key_validation(dict(Key="")))
