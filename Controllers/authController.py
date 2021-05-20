@@ -27,10 +27,12 @@ class AuthControl:
         token = f.encrypt(bytes(content.encode()))
         return str(token.decode())
         
-    def is_encrypted(self, content: str) -> bool:
-        if type(content) == bytes:
-            return True
-        return False
+    def is_encrypted(self, content: str, key: str) -> bool:
+        try:
+            self.decrypt(content, key)
+        except:
+            return False
+        return True
 
     def decrypt(self, content: str, key: str) -> str:
         f = Fernet(bytes(key.encode()))
