@@ -1,20 +1,15 @@
 import base64
-from typing import Tuple
-
-from flask.globals import request
 from config import KEY
-from cryptography.fernet import Fernet
 
 
 class AuthControl:
 
     def access_key_validation(self, request_header: dict) -> bool:
-        print(KEY, "aaaaaaaaaaaa")
-        if request_header['Key'] == KEY:
-
-            return True
-        
-        else:
+        try:
+            if request_header['Key'] == KEY:
+                return True
+            return False
+        except:
             return False
 
     def password_encode(self, password: str) -> str:

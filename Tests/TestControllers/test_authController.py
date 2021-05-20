@@ -1,8 +1,7 @@
-from unittest import TestCase, mock
-
-import Controllers.authController
+from unittest import TestCase
 from Controllers import authController
 ac = authController.AuthControl()
+
 
 class TestAuthController(TestCase):
     def test_password_encode_works(self):
@@ -18,10 +17,6 @@ class TestAuthController(TestCase):
         self.assertEqual(ac.password_decode("dGVzdGVwYXNzd29yZA=="), "testepassword")
         self.assertEqual(ac.password_decode("test"), "")
 
-    @mock.patch("Controllers.authController.KEY")
-    def test_access_key_validation_works(self, mock_authController_Key):
-        # with mock.patch("Controllers.authController.KEY") as mock_authController:
-        mock_authController_Key.return_value = "teste"
-        self.assertEqual(ac.access_key_validation(dict(Key="teste")), True)
-            # self.assertEqual()
-
+    def test_access_key_validation_works(self):
+        self.assertTrue(ac.access_key_validation(dict(Key="WADCAlhXPqJ4UL3JwO4fkhsAV8rIyE")))
+        self.assertFalse(ac.access_key_validation(dict(Key="test")))
