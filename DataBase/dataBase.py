@@ -73,7 +73,7 @@ class DataBase:
             return f"The informed id: {id}, does not exist! Try again!", 400
         except:
             return "Error: Could not get_user_by_id()", 400
-
+        
     def update_user_by_id(self, id, new_values):
         """
         Esta função atualiuza o usuário,
@@ -116,3 +116,45 @@ class DataBase:
             return ObjectId(id)
         except:
             return f"Id is not valid, review your id: {id} and try again!", 400
+
+
+    def find_users_by_id(self, list_id: list) -> list:
+        """
+        Esta função procura por id informados em uma lista,
+        recebe uma lista de id's
+        :param list ids
+        :return: response, 200 -> retorna o usuário e o status quo, caso não encontrado,
+        retorna uma mensagem relatando o mesmo.    
+        """    
+        list_users = []
+        list_objectId = self.convert_list_id_to_objectId(list_id)    
+        
+        try:            
+            response = self.users.find({"_id":{"$in":list_objectId}}, {"email": 1, "first_name": 1, "_id": 1})                       
+            print(type(response))
+            if response.count() > 0:                
+                for users in response:
+                    list_users.append(dict(first_name=users['first_name'], email=users['email']))                    
+
+                return dict(users=list_users), 200
+            return f"The informed id: {id}, does not exist! Try again!", 400
+        except Exception as error:
+            return str(error), 400
+
+
+    def convert_list_id_to_objectId(self, list_id):
+        """
+        Esta função converte id str para ObjectId,
+        recebe uma lista de id's
+        :param list ids (str)
+        :return: list com os id's ou uma lista vazia           
+        """ 
+        try:
+            list_converted_id = []
+
+            for id in list_id:
+                list_converted_id.append(ObjectId(id))
+            
+            return list_converted_id            
+        except:
+            return []   

@@ -1,6 +1,3 @@
-import json
-import requests
-import base64
 from flask import Flask, request
 from Controllers import routeController
 rc = routeController.RouteControl()
@@ -74,6 +71,17 @@ def get_user_by_id_route(id):
     result = rc.get_user_by_id_route(id)
     return result
 
+@app.route("/users/list", methods=['GET', 'POST'])
+def get_users_by_id_route():
+    """
+    Rota para listar todos os usuário que foram requisitados por uma lista dentro de um campo json chamado "_id"
+
+    Returns:
+        Uma lista de dicionários passando todos os usuários que foram pedidos.
+    """
+    get_request = request.get_json()
+    return rc.get_users_by_id_route(get_request)  
+ 
 
 if __name__ == '__main__':
     app.run(debug=True, host="localhost", port=5030)

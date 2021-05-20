@@ -55,6 +55,14 @@ class TestRouteController(TestCase):
         mock_id_creation.return_value = ""
         self.assertEqual(RouteControl().get_user_by_id_route(""), ({}, 400))
 
+    
+    @mock.patch("DataBase.dataBase.DataBase.find_users_by_id")
+    def test_get_users_by_id_route(self, mock_users_by_id_route):
+        mock_users_by_id_route.side_effect = [({}, 200),  ({}, 400)]
+        self.assertEqual(RouteControl().get_users_by_id_route({"_id":""}), ({}, 200))
+        self.assertEqual(RouteControl().get_users_by_id_route({"_id":""}), ({}, 400))
+
+
     @mock.patch("DataBase.dataBase.DataBase.get_user_by_email")
     @mock.patch("Controllers.authController.AuthControl.password_decode")
     @mock.patch("Controllers.authController.AuthControl.password_is_encoded")
