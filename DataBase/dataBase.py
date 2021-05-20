@@ -134,10 +134,10 @@ class DataBase:
             for users in response:
                 list_users.append(dict(first_name=users['first_name'], email=users['email']))
             if not len(list_users) > 0:
-                return "Error...", 404      
+                return "Error: Could not found users", 404      
             return dict(users=list_users), 200
-        except Exception as error:
-            return str(error), 400
+        except:
+            return "Error: Could not find_users_by_id()", 400
 
 
     def convert_list_id_to_objectId(self, list_id):
