@@ -7,3 +7,7 @@ pip install validate-docbr
 pip install email-validator
 pip install dnspython
 pip install pytest
+pip install uuid
+pip install coverage
+pip install requests
+pip install pytest-cov
