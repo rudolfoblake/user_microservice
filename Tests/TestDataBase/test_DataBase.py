@@ -92,3 +92,9 @@ class TestDataBase(TestCase):
 
             self.assertEqual(DataBase().find_users_by_id([""]), {})
 
+
+    def test_convert_list_id_to_objectId(self):
+        self.assertEqual(DataBase().convert_list_id_to_objectId([]), [])
+        self.assertEqual(DataBase().convert_list_id_to_objectId(["60a69d4a27d88a4efe20d19e"]), [ObjectId("60a69d4a27d88a4efe20d19e")])
+
+
