@@ -1,4 +1,5 @@
 from unittest import TestCase
+from config import KEY
 from Controllers import authController
 ac = authController.AuthControl()
 
@@ -18,5 +19,5 @@ class TestAuthController(TestCase):
         self.assertEqual(ac.password_decode("test"), "")
 
     def test_access_key_validation_works(self):
-        self.assertFalse(ac.access_key_validation(dict(Key="test")))
-        self.assertTrue(ac.access_key_validation(dict(Key="WADCAlhXPqJ4UL3JwO4fkhsAV8rIyE")))
+        self.assertTrue(ac.access_key_validation(dict(Key=KEY)))
+        self.assertFalse(ac.access_key_validation(dict(Key="AccessKey")))
