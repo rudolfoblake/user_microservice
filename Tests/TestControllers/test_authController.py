@@ -17,14 +17,6 @@ class TestAuthController(TestCase):
         self.assertEqual(ac.password_decode("dGVzdGVwYXNzd29yZA=="), "testepassword")
         self.assertEqual(ac.password_decode("test"), "")
 
-    # def test_encrypt_works(self):
-    #     content = "testing..."
-    #     key = "YTZTMkXyaOJ9Eum7yJewx7Ayy6MZSk8LdmDagZOxyWg="
-    #     encrypt = ac.encrypt(content, key)
-    #     self.assertEqual(type(encrypt), bytes)
-    #     result = ac.decrypt(encrypt, key)
-    #     self.assertEqual(result, content)
-
     @mock.patch("Controllers.authController.Fernet")
     def test_encrypt_works(self, mock_Fernet):
         mock_Fernet.return_value = mock.MagicMock()
