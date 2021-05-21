@@ -115,8 +115,7 @@ class DataBase:
         try:
             return ObjectId(id)
         except:
-            return f"Id is not valid, review your id: {id} and try again!", 400
-
+            return "invalid"
 
     def find_users_by_id(self, list_id: list) -> list:
         """
@@ -138,7 +137,6 @@ class DataBase:
             return dict(users=list_users), 200
         except:
             return "Error: Could not find_users_by_id()", 400
-
 
     def convert_list_id_to_objectId(self, list_id):
         """
