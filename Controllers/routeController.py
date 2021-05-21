@@ -113,7 +113,7 @@ class RouteControl:
             return "Error: Invalid token!", 404
         return user_id, 200
     
-    def set_address_route(self, address_data):
+    def set_address_route(self, address_data: dict) -> tuple:
         """Controller da rota de endereço
         Conferir os dados recebidos e atualizar o endereço do usuário no banco de dados.
 
@@ -130,3 +130,11 @@ class RouteControl:
 
     def get_user_by_id_route(self, id):
         return db.get_user_by_id(db.id_creation(id))
+
+    def change_password_route(self, user_data: dict) -> tuple:
+        verify_change_password = ic.verify_change_password_requirements(user_data)
+        if verify_change_password[1] != 200: return verify_change_password
+        get_user_by_id = db.get_user_by_id(db.id_creation(user_data['_id']))
+        if get_user_by_id[1] != 200: return get_user_by_id
+        return db.update_user_by_id(db.id_creation(user_data['id']), {"password": ac.encrypt(user_data['new_password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")})
+

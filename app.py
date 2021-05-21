@@ -68,6 +68,14 @@ def address_route():
     result = rc.set_address_route(transfrom_to_dict[0])
     return result
 
+#Essa rota precisa estar segura, apenas pode ser acessada com a permissão do front.
+@app.route("/user/account/password", methods=['POST'])
+def change_password_route():
+    transfrom_to_dict = ic.json_to_dict(request)
+    if transfrom_to_dict[1] != 200:
+        return transfrom_to_dict
+    result = rc.change_password_route(transfrom_to_dict[0])
+    return result
 
 @app.route("/user/<string:id>")
 def get_user_by_id_route(id):
