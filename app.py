@@ -59,6 +59,8 @@ def validate_recover_route(value):
         tuple(content, statuscode): Retorna o ID do usuário e o statuscode, em caso de erro retorna a mensagem e o statuscode.
     """
     if request.method == "POST":
+        if not ac.access_key_validation(dict(request.headers)):
+            return "Invalid access key.", 401
         return rc.recover_route(value)
     elif request.method == "GET":
         return rc.validate_recover_route(value)
@@ -71,15 +73,24 @@ def address_route():
     Returns:
         tuple(content, statuscode): Retorna o id do usuário conectado e o statuscode, em caso de erro retorna a mensagem de erro.
     """
+    if not ac.access_key_validation(dict(request.headers)):
+        return "Invalid access key.", 401
     transfrom_to_dict = ic.json_to_dict(request)
     if transfrom_to_dict[1] != 200:
         return transfrom_to_dict
     result = rc.set_address_route(transfrom_to_dict[0])
     return result
 
-#Essa rota precisa estar segura, apenas pode ser acessada com a permissão do front.
 @app.route("/user/account/password", methods=['POST'])
 def change_password_route():
+    """Rota de Troca de Senha
+    Verificar o json recebido e chamar o controller da rota de troca de senha.
+
+    Returns:
+        tuple(content, statuscode): Retorna o id do usuário e o statuscode, em caso de erro retorna a mensagem de erro.
+    """
+    if not ac.access_key_validation(dict(request.headers)):
+        return "Invalid access key.", 401
     transfrom_to_dict = ic.json_to_dict(request)
     if transfrom_to_dict[1] != 200:
         return transfrom_to_dict
@@ -102,6 +113,8 @@ def get_users_by_id_route():
     Returns:
         Uma lista de dicionários passando todos os usuários que foram pedidos.
     """
+    if not ac.access_key_validation(dict(request.headers)):
+        return "Invalid access key.", 401
     get_request = request.get_json()
     return rc.get_users_by_id_route(get_request)  
  

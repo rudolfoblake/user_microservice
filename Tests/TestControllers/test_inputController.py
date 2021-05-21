@@ -173,6 +173,14 @@ class TestInputController(TestCase):
         self.assertTrue(ic.verify_password("ABCDEFG"))
         self.assertTrue(ic.verify_password("!@#$%&"))
 
+    def test_verify_change_password_requirements_works(self):
+        user_data = {"new_password": "123456"}
+        self.assertEqual(ic.verify_change_password_requirements(user_data)[1], 400)
+        user_data = {"_id": "iwkJ55AxTiJx", "new_password": "123"}
+        self.assertEqual(ic.verify_change_password_requirements(user_data)[1], 400)
+        user_data = {"_id": "iwkJ55AxTiJx", "new_password": "123456"}
+        self.assertEqual(ic.verify_change_password_requirements(user_data)[1], 200)
+
     def test_validate_cpf_works(self):
         self.assertTrue(ic.validate_cpf(CPF().generate()))
         self.assertTrue(ic.validate_cpf(CPF().generate(True)))

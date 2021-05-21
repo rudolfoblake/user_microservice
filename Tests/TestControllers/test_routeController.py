@@ -145,3 +145,23 @@ class TestRouteController(TestCase):
         mock_verify_address.return_value = ("", 200)
         mock_update_user_by_id.return_value = ("", 200)
         self.assertEqual(rc.set_address_route(address_data)[1], 200)
+
+    @mock.patch("DataBase.dataBase.DataBase.id_creation")
+    @mock.patch("DataBase.dataBase.DataBase.update_user_by_id")
+    @mock.patch("DataBase.dataBase.DataBase.get_user_by_id")
+    @mock.patch("Controllers.inputController.InputControl.verify_change_password_requirements")
+    def test_change_password_route_works(self, mock_verify_change_password_requirements, mock_get_user_by_id, mock_update_user_by_id, mock_id_creation):
+        user_data = {
+            "_id": "BTHuG6MsK4n8",
+            "new_password": "Y0Umj8hRCRHS"
+        }
+        mock_verify_change_password_requirements.return_value = ("error test", 400)
+        self.assertEqual(rc.change_password_route(user_data)[1], 400)
+        mock_verify_change_password_requirements.return_value = ("error test", 200)
+        mock_get_user_by_id.return_value = ("error test", 404)
+        self.assertEqual(rc.change_password_route(user_data)[1], 404)
+        mock_get_user_by_id.return_value = ("error test", 200)
+        mock_update_user_by_id.return_value = ("success test", 200)
+        mock_id_creation.return_value = "BTHuG6MsK4n8"
+        self.assertEqual(rc.change_password_route(user_data)[1], 200)
+
