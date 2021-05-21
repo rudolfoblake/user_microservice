@@ -130,3 +130,8 @@ class RouteControl:
 
     def get_user_by_id_route(self, id):
         return db.get_user_by_id(db.id_creation(id))
+
+    def get_users_by_id_route(self, list_id):
+        return db.find_users_by_id(list_id["_id"])
+        
+       
