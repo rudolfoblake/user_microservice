@@ -115,7 +115,7 @@ class DataBase:
         try:
             return ObjectId(id)
         except:
-            return f"Id is not valid, review your id: {id} and try again!", 400
+            return "invalid"
 
 
     def find_users_by_id(self, list_id: list) -> list:

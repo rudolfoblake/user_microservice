@@ -80,7 +80,7 @@ class TestDataBase(TestCase):
 
         informed_id = "123"
         self.assertEqual(DataBase().id_creation(informed_id),
-                         ("Id is not valid, review your id: 123 and try again!", 400))
+                         "invalid")
 
     @mock.patch("DataBase.dataBase.DataBase.convert_list_id_to_objectId")
     @mock.patch("DataBase.dataBase.DataBase.users", create=True)
