@@ -1,4 +1,5 @@
 import os
+import config
 from flask import Flask, request
 from Controllers import routeController
 rc = routeController.RouteControl()
@@ -119,4 +120,4 @@ def get_users_by_id_route():
     return rc.get_users_by_id_route(get_request)  
  
 if __name__ == '__main__':
-    app.run(debug=True, host="localhost", port=5030)
+    app.run(debug=True, host="localhost", port=config.PORT)
