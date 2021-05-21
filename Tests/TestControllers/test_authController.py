@@ -1,7 +1,9 @@
 from unittest import TestCase, mock
+from config import KEY
 from Controllers import authController
 import base64
 ac = authController.AuthControl()
+
 
 class TestAuthController(TestCase):
     def test_password_encode_works(self):
@@ -16,6 +18,11 @@ class TestAuthController(TestCase):
     def test_password_decode_works(self):
         self.assertEqual(ac.password_decode("dGVzdGVwYXNzd29yZA=="), "testepassword")
         self.assertEqual(ac.password_decode("test"), "")
+
+    def test_access_key_validation_works(self):
+        self.assertTrue(ac.access_key_validation(dict(Key=KEY)))
+        self.assertFalse(ac.access_key_validation(dict(Key="AccessKey")))
+        self.assertFalse(ac.access_key_validation(dict()))
 
     @mock.patch("Controllers.authController.Fernet")
     def test_encrypt_works(self, mock_Fernet):
