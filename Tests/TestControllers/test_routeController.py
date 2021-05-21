@@ -55,14 +55,25 @@ class TestRouteController(TestCase):
         mock_id_creation.return_value = ""
         self.assertEqual(RouteControl().get_user_by_id_route(""), ({}, 400))
 
+    
+    @mock.patch("DataBase.dataBase.DataBase.find_users_by_id")
+    def test_get_users_by_id_route(self, mock_users_by_id_route):
+        mock_users_by_id_route.side_effect = [({}, 200),  ({}, 400)]
+        self.assertEqual(RouteControl().get_users_by_id_route({"_id":""}), ({}, 200))
+        self.assertEqual(RouteControl().get_users_by_id_route({"_id":""}), ({}, 400))
+
+
+    @mock.patch("Controllers.authController.AuthControl.decrypt")
+    @mock.patch("Controllers.authController.AuthControl.is_encrypted")
     @mock.patch("DataBase.dataBase.DataBase.get_user_by_email")
     @mock.patch("Controllers.authController.AuthControl.password_decode")
     @mock.patch("Controllers.authController.AuthControl.password_is_encoded")
     @mock.patch("Controllers.inputController.InputControl.verify_user_login_requirements")
-    def test_login_route_works(self, mock_verify_user_login_requirements, mock_password_is_encoded, mock_password_decode, mock_get_user_by_email):
+    def test_login_route_works(self, mock_verify_user_login_requirements, mock_password_is_encoded, mock_password_decode, mock_get_user_by_email, mock_is_encrypted, mock_decrypt):
+        mock_is_encrypted.return_value = False
         user_data = dict(
             email="",
-            password=""
+            password="testingpassword"
         )
         mock_verify_user_login_requirements.return_value = ("", 400)
         self.assertEqual(rc.login_route(user_data)[1], 400)
@@ -83,7 +94,9 @@ class TestRouteController(TestCase):
         mock_password_decode.side_effect = ["x", "y"]
         mock_get_user_by_email.return_value = (dict(_id="wadwadasdfser", password="dawd"), 200)
         self.assertEqual(rc.login_route(user_data)[1], 401)
-        mock_password_decode.side_effect = ["x", "x"]
+        mock_password_decode.side_effect = ["testingpassword", "X"]
+        mock_is_encrypted.return_value = True
+        mock_decrypt.return_value = "testingpassword"
         self.assertEqual(rc.login_route(user_data)[1], 200)
 
     @mock.patch("Controllers.mailController.MailControl.send_mail")
