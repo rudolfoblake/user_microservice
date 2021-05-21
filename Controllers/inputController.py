@@ -3,9 +3,11 @@ from validate_docbr import CPF
 from email_validator import validate_email, EmailNotValidError
 from Controllers import authController
 ac = authController.AuthControl()
+import config
 import datetime
 import string
 import re
+
 
 class InputControl:
      def json_to_dict(self, request:json) -> tuple:
@@ -198,17 +200,17 @@ class InputControl:
           return True
 
      def encrypt_register_data(self, user_data:dict) -> dict:
-          if not ac.is_encrypted(user_data['first_name']):
-               user_data['first_name'] = ac.encrypt(user_data['first_name'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
-          if not ac.is_encrypted(user_data['last_name']):
-               user_data['last_name'] = ac.encrypt(user_data['last_name'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
-          if not ac.is_encrypted(user_data['cpf']):
-               user_data['cpf'] = ac.encrypt(user_data['cpf'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
-          if not ac.is_encrypted(user_data['password']):
-               user_data['password'] = ac.encrypt(user_data['password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          if not ac.is_encrypted(user_data['first_name'], config.CRYPT_KEY):
+               user_data['first_name'] = ac.encrypt(user_data['first_name'], config.CRYPT_KEY)
+          if not ac.is_encrypted(user_data['last_name'], config.CRYPT_KEY):
+               user_data['last_name'] = ac.encrypt(user_data['last_name'], config.CRYPT_KEY)
+          if not ac.is_encrypted(user_data['cpf'], config.CRYPT_KEY):
+               user_data['cpf'] = ac.encrypt(user_data['cpf'], config.CRYPT_KEY)
+          if not ac.is_encrypted(user_data['password'], config.CRYPT_KEY):
+               user_data['password'] = ac.encrypt(user_data['password'], config.CRYPT_KEY)
           try:
                if not ac.is_encrypted(user_data['phone_number']):
-                    user_data['phone_number'] = ac.encrypt(user_data['phone_number'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+                    user_data['phone_number'] = ac.encrypt(user_data['phone_number'], config.CRYPT_KEY)
           except:
                pass
           return user_data
