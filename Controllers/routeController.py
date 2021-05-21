@@ -11,8 +11,6 @@ tc = tokenController.Token()
 import config
 
 
-import config
-
 class RouteControl:
     def register_route(self, user_data: dict) -> tuple:
         """Controller da rota de registro
