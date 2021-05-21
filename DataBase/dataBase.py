@@ -86,7 +86,7 @@ class DataBase:
             new_values['updated_at'] = datetime.today()
             response = self.users.update_one({"_id": id}, {"$set": new_values}).modified_count
             if response:
-                return f"Id: {id} was updated with success!", 200
+                return id, 200
             return f"Error: Id {id} does not exist, try again!", 400
         except:
             return "Error: Could not update_user_by_id()", 400
@@ -101,7 +101,7 @@ class DataBase:
         try:
             response = self.users.delete_one({"_id": id}).deleted_count
             if response:
-                return f"Deleted with success id: {id}", 200
+                return id, 200
             return f"Error: Id {id} does not exist, try again!", 400
         except:
             return "Error: Could not delete_user_by_id()", 400
