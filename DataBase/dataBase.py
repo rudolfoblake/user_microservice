@@ -132,7 +132,7 @@ class DataBase:
         try:            
             response = self.users.find({"_id":{"$in":list_objectId}}, {"email": 1, "first_name": 1, "_id": 1})           
             for users in response:
-                list_users.append(dict(first_name=users['first_name'], email=users['email']))
+                list_users.append(dict(id=str(users['_id']), first_name=users['first_name'], email=users['email']))
             if not len(list_users) > 0:
                 return "Error: Could not found users", 404      
             return dict(users=list_users), 200
@@ -155,4 +155,5 @@ class DataBase:
             
             return list_converted_id            
         except:
-            return []   
+            return []
+            
