@@ -115,7 +115,7 @@ class RouteControl:
             return "Error: Invalid token!", 404
         return user_id, 200
     
-    def set_address_route(self, address_data):
+    def set_address_route(self, address_data: dict) -> tuple:
         """Controller da rota de endereço
         Conferir os dados recebidos e atualizar o endereço do usuário no banco de dados.
 
@@ -130,10 +130,26 @@ class RouteControl:
             return verify_address
         return db.update_user_by_id(db.id_creation(address_data['_id']), dict(address=address_data['address']))
 
-    def get_user_by_id_route(self, id):
+    def get_user_by_id_route(self, id: str) -> tuple:
         return db.get_user_by_id(db.id_creation(id))
 
-    def get_users_by_id_route(self, list_id):
+    def change_password_route(self, user_data: dict) -> tuple:
+        """Controller da rota de troca de senha
+        Conferir os dados recebidos, verificar se existe um usuário com o id inserido e realizar a troca da senha.
+
+        Args:
+            user_data (dict): Dicionário com o id e nova senha do usuário.
+
+        Returns:
+            tuple: Retorna o id do usuário que teve a senha alterada e o código 200, em caso de erro retorna a mensagem de erro e o statuscode.
+        """
+        verify_change_password = ic.verify_change_password_requirements(user_data)
+        if verify_change_password[1] != 200: return verify_change_password
+        get_user_by_id = db.get_user_by_id(db.id_creation(user_data['_id']))
+        if get_user_by_id[1] != 200: return get_user_by_id
+        return db.update_user_by_id(db.id_creation(user_data['_id']), {"password": ac.encrypt(user_data['new_password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")})
+
+    def get_users_by_id_route(self, list_id: str) -> tuple:
         return db.find_users_by_id(list_id["_id"])
         
        

@@ -142,6 +142,16 @@ class InputControl:
                return False
           return True
 
+     def verify_change_password_requirements(self, user_data: dict) -> tuple:
+          try:
+               user_data['_id']
+               user_data['new_password']
+          except:
+               return "Error: Requirements: (_id, password, new_password) not found on json", 400
+          if not self.verify_password(user_data['new_password']):
+               return "Error: Invalid password.", 400
+          return "Success", 200
+
      def validate_cpf(self, cpf: str) -> bool:
           """Verifica o CPF do usuário.
           Verificar o cpf do usuário, a fim de garantir que ele seja um CPF real.
