@@ -4,6 +4,9 @@ from Controllers import routeController
 rc = routeController.RouteControl()
 from Controllers import inputController
 ic = inputController.InputControl()
+from Controllers import authController
+ac = authController.AuthControl()
+
 
 os.system("python -m pytest")
 
@@ -18,6 +21,9 @@ def register_route():
     Returns:
         tuple(content, statuscode): Retorna o id do usuário registrado e o statuscode, em caso de erro retorna a mensagem de erro.
     """
+    if not ac.access_key_validation(dict(request.headers)):
+        return "Invalid access key.", 401
+    
     transfrom_to_dict = ic.json_to_dict(request)
     if transfrom_to_dict[1] != 200:
         return transfrom_to_dict
@@ -32,6 +38,9 @@ def login_route():
     Returns:
         tuple(content, statuscode): Retorna o id do usuário conectado e o statuscode, em caso de erro retorna a mensagem de erro.
     """	
+    if not ac.access_key_validation(dict(request.headers)):
+        return "Invalid access key.", 401
+
     transfrom_to_dict = ic.json_to_dict(request)
     if transfrom_to_dict[1] != 200:
         return transfrom_to_dict
@@ -79,9 +88,22 @@ def change_password_route():
 
 @app.route("/user/<string:id>")
 def get_user_by_id_route(id):
+    if not ac.access_key_validation(dict(request.headers)):
+        return "Invalid access key.", 401
+        
     result = rc.get_user_by_id_route(id)
     return result
 
+@app.route("/users/list", methods=['GET', 'POST'])
+def get_users_by_id_route():
+    """
+    Rota para listar todos os usuário que foram requisitados por uma lista dentro de um campo json chamado "_id"
 
+    Returns:
+        Uma lista de dicionários passando todos os usuários que foram pedidos.
+    """
+    get_request = request.get_json()
+    return rc.get_users_by_id_route(get_request)  
+ 
 if __name__ == '__main__':
     app.run(debug=True, host="localhost", port=5030)

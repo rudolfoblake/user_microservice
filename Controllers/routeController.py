@@ -138,3 +138,7 @@ class RouteControl:
         if get_user_by_id[1] != 200: return get_user_by_id
         return db.update_user_by_id(db.id_creation(user_data['id']), {"password": ac.encrypt(user_data['new_password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")})
 
+    def get_users_by_id_route(self, list_id):
+        return db.find_users_by_id(list_id["_id"])
+        
+       
