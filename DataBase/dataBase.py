@@ -4,7 +4,6 @@ from bson.objectid import ObjectId
 from datetime import datetime
 
 
-
 class DataBase:
 
     def __init__(self):
