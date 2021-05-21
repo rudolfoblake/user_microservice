@@ -1,6 +1,8 @@
 import json
 from validate_docbr import CPF
 from email_validator import validate_email, EmailNotValidError
+from Controllers import authController
+ac = authController.AuthControl()
 import datetime
 import string
 import re
@@ -49,6 +51,26 @@ class InputControl:
                     return "Error: Invalid password.", 400
           except:
                return "Error: Requirements (first_name, last_name, email, password, cpf, date_of_birth) not found at json", 400
+          return "Success", 200
+
+     def verify_address_requirements(self, address_data: dict) -> tuple:
+          try:
+               address_data['_id']
+               if not type(address_data['address']) == list:
+                    return "Error: address need be a list", 400
+               for i in range(len(address_data['address'])):
+                    if type(address_data['address'][i]['address_number']) != int:
+                         return "Error: address number need be a int", 400
+                    if type(address_data['address'][i]['address_neighbourhood']) != str:
+                         return "Error: address neighbourhood needs be a string", 400
+                    if type(address_data['address'][i]['address_postal_code']) != str:
+                         return "Error: address postal code needs be a int", 400
+                    if type(address_data['address'][i]['address_city']) != str:
+                         return "Error: address city needs be a string", 400
+                    if type(address_data['address'][i]['address_state']) != str:
+                         return "Error: address state needs be a string", 400
+          except:
+               return "Error: Requeriments (_id, address[address_number, address_neighbourhood, address_postal_code, address_city, address_state]) not found on json", 400
           return "Success", 200
 
      def verify_user_login_requirements(self, user_data: dict) -> tuple:
@@ -164,3 +186,19 @@ class InputControl:
           except:
                return False
           return True
+
+     def encrypt_register_data(self, user_data:dict) -> dict:
+          if not ac.is_encrypted(user_data['first_name']):
+               user_data['first_name'] = ac.encrypt(user_data['first_name'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          if not ac.is_encrypted(user_data['last_name']):
+               user_data['last_name'] = ac.encrypt(user_data['last_name'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          if not ac.is_encrypted(user_data['cpf']):
+               user_data['cpf'] = ac.encrypt(user_data['cpf'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          if not ac.is_encrypted(user_data['password']):
+               user_data['password'] = ac.encrypt(user_data['password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          try:
+               if not ac.is_encrypted(user_data['phone_number']):
+                    user_data['phone_number'] = ac.encrypt(user_data['phone_number'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")
+          except:
+               pass
+          return user_data
