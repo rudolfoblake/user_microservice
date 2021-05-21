@@ -47,7 +47,7 @@ class TestDataBase(TestCase):
             mock_database_users.update_one.return_value.modified_count = 1
 
             self.assertEqual(DataBase().update_user_by_id("60a1444b370ea792caef5419", {}),
-                             ("Id: 60a1444b370ea792caef5419 was updated with success!", 200))
+                             ("60a1444b370ea792caef5419", 200))
 
             mock_database_users.update_one.return_value.modified_count = 0
             self.assertEqual(DataBase().update_user_by_id("60a1444b370ea792caef5419", {}),
@@ -63,7 +63,7 @@ class TestDataBase(TestCase):
 
             mock_database_users.delete_one.return_value.deleted_count = 1
             self.assertEqual(DataBase().delete_user_by_id("60a1444b370ea792caef5419"),
-                             ("Deleted with success id: 60a1444b370ea792caef5419", 200))
+                             ("60a1444b370ea792caef5419", 200))
 
             mock_database_users.delete_one.return_value.deleted_count = 0
             self.assertEqual(DataBase().delete_user_by_id("60a1444b370ea792caef5419"),
@@ -90,11 +90,13 @@ class TestDataBase(TestCase):
             database_returne = [
                 dict(
                     first_name="name1",
-                    email="email1"
+                    email="email1",
+                    _id="idtest"
                 ),
                 dict(
                     first_name="name2",
-                    email="email2"
+                    email="email2",
+                    _id="idtest"
                 )
             ]
 
