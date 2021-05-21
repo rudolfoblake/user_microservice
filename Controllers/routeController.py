@@ -128,7 +128,7 @@ class RouteControl:
             return verify_address
         return db.update_user_by_id(db.id_creation(address_data['_id']), dict(address=address_data['address']))
 
-    def get_user_by_id_route(self, id):
+    def get_user_by_id_route(self, id: str) -> tuple:
         return db.get_user_by_id(db.id_creation(id))
 
     def change_password_route(self, user_data: dict) -> tuple:
@@ -147,7 +147,7 @@ class RouteControl:
         if get_user_by_id[1] != 200: return get_user_by_id
         return db.update_user_by_id(db.id_creation(user_data['_id']), {"password": ac.encrypt(user_data['new_password'], "K22eIoXBwOnMuJL6nRo0GOIZLGNgGa_diB_FJvUa3AY=")})
 
-    def get_users_by_id_route(self, list_id):
+    def get_users_by_id_route(self, list_id: str) -> tuple:
         return db.find_users_by_id(list_id["_id"])
         
        
