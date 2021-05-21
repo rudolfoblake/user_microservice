@@ -9,6 +9,8 @@ mc = mailController.MailControl()
 from Controllers import tokenController
 tc = tokenController.Token()
 
+import config
+
 class RouteControl:
     def register_route(self, user_data: dict) -> tuple:
         """Controller da rota de registro
@@ -94,7 +96,7 @@ class RouteControl:
         token = tc.generate_token(get_user_by_email[0]['_id'])
         if token == None:
             return "Error: Cannot generate token.", 500
-        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha.\n\nhttp://localhost:5030/user/auth/token/{token['token_id']}\n\nLembrando que seu link é valido por 15 minutos!"):
+        if not mc.send_mail(email, "Recuperação de Conta Livro para Todxs", f"Olá {get_user_by_email[0]['first_name']}, clique no link a baixo para redefinir sua senha.\n\n{config.HOST}/user/auth/token/{token['token_id']}\n\nLembrando que seu link é valido por 15 minutos!"):
             return "Error: Cannot send recover email.", 400
         return "Success: Token generated with success!", 200
     
