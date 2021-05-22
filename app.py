@@ -66,8 +66,8 @@ def validate_recover_route(value):
     elif request.method == "GET":
         return rc.validate_recover_route(value)
         
-@app.route("/user/address", methods=['POST', 'PUT'])
-def address_route():
+@app.route("/user/address/<string:user_id>", methods=['POST', 'PUT'])
+def address_route(user_id):
     """Rota de Cadastro/Atualização de Endereço
     Verificar o json recebido e chamar o controller da rota de endereço.
 
@@ -79,7 +79,7 @@ def address_route():
     transfrom_to_dict = ic.json_to_dict(request)
     if transfrom_to_dict[1] != 200:
         return transfrom_to_dict
-    result = rc.set_address_route(transfrom_to_dict[0])
+    result = rc.set_address_route(transfrom_to_dict[0], user_id)
     return result
 
 @app.route("/user/account/password", methods=['POST'])
@@ -98,7 +98,7 @@ def change_password_route():
     result = rc.change_password_route(transfrom_to_dict[0])
     return result
 
-@app.route("/user/<string:id>")
+@app.route("/user/<string:id>", methods=['GET'])
 def get_user_by_id_route(id):
     if not ac.access_key_validation(dict(request.headers)):
         return "Invalid access key.", 401

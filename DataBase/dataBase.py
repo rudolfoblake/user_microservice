@@ -85,7 +85,7 @@ class DataBase:
             new_values['updated_at'] = datetime.today()
             response = self.users.update_one({"_id": id}, {"$set": new_values}).modified_count
             if response:
-                return id, 200
+                return str(id), 200
             return f"Error: Id {id} does not exist, try again!", 400
         except:
             return "Error: Could not update_user_by_id()", 400

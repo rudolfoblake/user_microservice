@@ -57,7 +57,6 @@ class InputControl:
 
      def verify_address_requirements(self, address_data: dict) -> tuple:
           try:
-               address_data['_id']
                if not type(address_data['address']) == list:
                     return "Error: address need be a list", 400
                for i in range(len(address_data['address'])):
