@@ -58,6 +58,8 @@ class Token:
                     is_valid = True
                     selected_token = i
                     user_id = tokens[i]['user_id']
+                else:
+                    self.delete_token(i)
         if user_id != "":
             self.delete_token(selected_token)
         return user_id
