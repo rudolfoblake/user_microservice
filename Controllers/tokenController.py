@@ -1,6 +1,5 @@
 import uuid
 import time
-import datetime
 
 tokens = []
 
@@ -55,7 +54,6 @@ class Token:
         for i in range(len(tokens)):
             if token_id == tokens[i]['token_id']:
                 if tokens[i]['expire'] >= time.time():
-                    is_valid = True
                     selected_token = i
                     user_id = tokens[i]['user_id']
         if user_id != "":
