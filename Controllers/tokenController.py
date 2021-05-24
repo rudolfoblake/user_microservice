@@ -1,3 +1,4 @@
+from re import split
 import uuid
 import time
 
@@ -33,7 +34,7 @@ class Token:
             dict: Retorna o token do usuário com token_id, user_id e expire.
         """
         token = {
-                "token_id": uuid.uuid4().hex,
+                "token_id": str(uuid.uuid4()).split("-")[0],
                 "user_id": user_id,
                 "expire": time.time() + (15 * 60) #Validade de 15 minutos nos tokens
             }
@@ -56,6 +57,8 @@ class Token:
                 if tokens[i]['expire'] >= time.time():
                     selected_token = i
                     user_id = tokens[i]['user_id']
+                else:
+                    self.delete_token(i)
         if user_id != "":
             self.delete_token(selected_token)
         return user_id
