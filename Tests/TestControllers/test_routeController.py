@@ -99,15 +99,17 @@ class TestRouteController(TestCase):
         mock_decrypt.return_value = "testingpassword"
         self.assertEqual(rc.login_route(user_data)[1], 200)
 
+    @mock.patch("Controllers.authController.AuthControl.decrypt")
     @mock.patch("Controllers.mailController.MailControl.send_mail")
     @mock.patch("Controllers.tokenController.Token.generate_token")
     @mock.patch("DataBase.dataBase.DataBase.get_user_by_email")
-    def test_recover_route_works(self, mock_get_user_by_email, mock_generate_token, mock_send_mail):
+    def test_recover_route_works(self, mock_get_user_by_email, mock_generate_token, mock_send_mail, mock_decrypt):
         token = {
                 "token_id": "XjfWHiXtQltejTQpPXSp",
                 "user_id": "UWfDaRdIdzhGaNeMTX9L",
                 "expire": 14868846548.185464 #Validade de 15 minutos nos tokens
             }
+        mock_decrypt.return_vaue = "UWfDaRdIdzhGaNeMTX9L"
         mock_get_user_by_email.return_value = ("", 404)
         self.assertEqual(rc.recover_route("myemail@email.com")[1], 404)
 
