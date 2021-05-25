@@ -48,7 +48,7 @@ class InputControl:
                if not self.validate_email(user_data['email']):
                     return "Error: Invalid Email.", 400
                if not self.validate_date_of_birth(user_data['date_of_birth']):
-                    return "Error: Invalid birth date.", 400
+                    return "Error: Invalid birth date format, please use (MM/DD/AAAA).", 400
                if not self.verify_password(user_data['password']):
                     return "Error: Invalid password.", 400
           except:
