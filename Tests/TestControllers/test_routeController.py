@@ -9,12 +9,13 @@ from DataBase.dataBase import DataBase
 rc = routeController.RouteControl()
 
 class TestRouteController(TestCase):
+    @mock.patch("DataBase.dataBase.DataBase.create_user")
     @mock.patch("Controllers.inputController.InputControl.encrypt_register_data")
     @mock.patch("Controllers.authController.AuthControl.password_decode")
     @mock.patch("Controllers.authController.AuthControl.password_is_encoded")
     @mock.patch("DataBase.dataBase.DataBase.get_user_by_email")
     @mock.patch("Controllers.inputController.InputControl.verify_user_register_requirements")
-    def test_register_route_works(self, mock_verify_user_register_requirements, mock_get_user_by_email, mock_password_is_encoded, mock_password_decode, mock_encrypt_register_data):
+    def test_register_route_works(self, mock_verify_user_register_requirements, mock_get_user_by_email, mock_password_is_encoded, mock_password_decode, mock_encrypt_register_data, mock_create_user):
         user_data = dict(
             first_name="Carlos", 
             last_name="Antonio", 
@@ -42,6 +43,7 @@ class TestRouteController(TestCase):
         mock_password_is_encoded.return_value = True
         mock_password_decode.return_value = "test"
         mock_get_user_by_email.return_value = ([''], 404)
+        mock_create_user.return_value = ("", 201)
         self.assertEqual(rc.register_route(user_data)[1], 201)
 
     @mock.patch("Controllers.inputController.InputControl.decrypt_address_data")

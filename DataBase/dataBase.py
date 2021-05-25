@@ -12,7 +12,7 @@ class DataBase:
         """
         try:
             self.conn = pymongo.MongoClient(config.URL, ssl=True, ssl_cert_reqs='CERT_NONE')
-            self.db = self.conn["database_teste"]
+            self.db = self.conn["users_search_db"]
             self.users = self.db["users"]
         except:
             raise Exception("Failed to connect with the TestDataBase, check your string connection!!")
