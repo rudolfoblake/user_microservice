@@ -213,3 +213,20 @@ class InputControl:
           except:
                pass
           return user_data
+
+     def encrypt_address_data(self, address_data: dict) -> dict:
+          for i in range(len(address_data['address'])):
+               address_data['address'][i]['address_neighbourhood'] = ac.encrypt(address_data['address'][i]['address_neighbourhood'], config.CRYPT_KEY)
+               address_data['address'][i]['address_postal_code'] = ac.encrypt(address_data['address'][i]['address_postal_code'], config.CRYPT_KEY)
+               address_data['address'][i]['address_city'] = ac.encrypt(address_data['address'][i]['address_city'], config.CRYPT_KEY)
+               address_data['address'][i]['address_state'] = ac.encrypt(address_data['address'][i]['address_state'], config.CRYPT_KEY)
+          return address_data['address']
+
+     def decrypt_address_data(self, address_data: dict) -> dict:
+          for i in range(len(address_data['address'])):
+               address_data['address'][i]['address_neighbourhood'] = ac.decrypt(address_data['address'][i]['address_neighbourhood'], config.CRYPT_KEY)
+               address_data['address'][i]['address_postal_code'] = ac.decrypt(address_data['address'][i]['address_postal_code'], config.CRYPT_KEY)
+               address_data['address'][i]['address_city'] = ac.decrypt(address_data['address'][i]['address_city'], config.CRYPT_KEY)
+               address_data['address'][i]['address_state'] = ac.decrypt(address_data['address'][i]['address_state'], config.CRYPT_KEY)
+          return address_data['address']
+     

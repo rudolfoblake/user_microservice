@@ -128,10 +128,18 @@ class RouteControl:
         verify_address = ic.verify_address_requirements(address_data)
         if verify_address[1] != 200:
             return verify_address
+        address_data['address'] = ic.encrypt_address_data(address_data)
+        
         return db.update_user_by_id(db.id_creation(user_id), dict(address=address_data['address']))
 
     def get_user_by_id_route(self, id: str) -> tuple:
-        return db.get_user_by_id(db.id_creation(id))
+        user_data = db.get_user_by_id(db.id_creation(id))
+        try:
+            if user_data[0]['address']:
+                user_data[0]['address'] = ic.decrypt_address_data(user_data[0])
+        except:
+            pass
+        return user_data
 
     def change_password_route(self, user_data: dict) -> tuple:
         """Controller da rota de troca de senha
