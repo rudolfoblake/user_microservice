@@ -44,16 +44,29 @@ class TestRouteController(TestCase):
         mock_get_user_by_email.return_value = ([''], 404)
         self.assertEqual(rc.register_route(user_data)[1], 201)
 
+    @mock.patch("Controllers.inputController.InputControl.decrypt_address_data")
     @mock.patch("DataBase.dataBase.DataBase.id_creation")
     @mock.patch("DataBase.dataBase.DataBase.get_user_by_id")
-    def test_get_user_by_id_route(self, mock_get_user_by_id, mock_id_creation):
-        mock_get_user_by_id.return_value = ({"dict"}, 200)
+    def test_get_user_by_id_route(self, mock_get_user_by_id, mock_id_creation, mock_decrypt_address_data):
         mock_id_creation.return_value = ObjectId("60a1444b370ea792caef5419")
-        self.assertEqual(RouteControl().get_user_by_id_route(ObjectId("60a1444b370ea792caef5419")), ({"dict"}, 200))
+        mock_get_user_by_id.return_value = ((dict()), 200)
+        self.assertEqual(rc.get_user_by_id_route("60a1444b370ea792caef5419")[1], 200)
+        mock_get_user_by_id.return_value = ((dict(address=[{
+            "address_number": 77,
+			"address_neighbourhood": "Bairro",
+			"address_postal_code": "00000000",
+			"address_city": "Florianópolis",
+			"address_state": "SC"
+        }])), 200)
+        mock_decrypt_address_data.return_value = [{
+            "address_number": 77,
+			"address_neighbourhood": "Bairro",
+			"address_postal_code": "00000000",
+			"address_city": "Florianópolis",
+			"address_state": "SC"
+        }]
 
-        mock_get_user_by_id.return_value = ({}, 400)
-        mock_id_creation.return_value = ""
-        self.assertEqual(RouteControl().get_user_by_id_route(""), ({}, 400))
+        self.assertEqual(rc.get_user_by_id_route("60a1444b370ea792caef5419")[1], 200)
 
     
     @mock.patch("DataBase.dataBase.DataBase.find_users_by_id")

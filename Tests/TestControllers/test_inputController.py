@@ -252,3 +252,36 @@ class TestInputController(TestCase):
             encripted_user_data['password']
         ]
         self.assertEqual(ic.encrypt_register_data(user_data), encripted_user_data)
+
+    @mock.patch("Controllers.authController.AuthControl.encrypt")
+    def test_encrypt_address_data_works(self, mock_encrypt):
+        mock_encrypt.return_value = ""
+        address_data = {
+            "address": [
+                {
+                    "address_number": 77,
+                    "address_neighbourhood": "Bairro",
+                    "address_postal_code": "00000000",
+                    "address_city": "Florianópolis",
+                    "address_state": "SC"
+                }
+            ]
+        }
+        self.assertEqual(ic.encrypt_address_data(address_data), address_data['address'])
+    
+    @mock.patch("Controllers.authController.AuthControl.decrypt")
+    def test_decrypt_address_data_works(self, mock_decrypt):
+        mock_decrypt.return_value = ""
+        address_data = {
+            "address": [
+                {
+                    "address_number": 77,
+                    "address_neighbourhood": "Bairro",
+                    "address_postal_code": "00000000",
+                    "address_city": "Florianópolis",
+                    "address_state": "SC"
+                }
+            ]
+        }
+        self.assertEqual(ic.decrypt_address_data(address_data), address_data['address'])
+
